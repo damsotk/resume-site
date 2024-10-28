@@ -1,16 +1,6 @@
 {
   "daily_affairs": [
     {
-      "id": "6",
-      "name": "Study React1",
-      "description": "Spend two hours learning advanced React concepts.",
-      "end_time": "23.09.2024, 14:00:00",
-      "tags": [
-        "programming"
-      ],
-      "endDate": "2024-09-23T12:00:00.000Z"
-    },
-    {
       "id": "7",
       "name": "Plan trip",
       "description": "Research and plan routes and accommodation for the upcoming trip.",
@@ -49,6 +39,16 @@
         "leisure"
       ],
       "endDate": "2024-09-25T19:00:00.000Z"
+    },
+    {
+      "id": "6",
+      "name": "1",
+      "description": "1",
+      "end_time": "",
+      "tags": [
+        "1"
+      ],
+      "endDate": "2024-10-28T21:45:28.094Z"
     }
   ],
   "completed_affairs": [
@@ -96,6 +96,17 @@
       ],
       "endDate": "2024-09-23T08:15:00.000Z",
       "completion_time": "09.10.2024, 09:21:16"
+    },
+    {
+      "id": "6",
+      "name": "Study React1",
+      "description": "Spend two hours learning advanced React concepts.",
+      "end_time": "23.09.2024, 14:00:00",
+      "tags": [
+        "programming"
+      ],
+      "endDate": "2024-09-23T12:00:00.000Z",
+      "completion_time": "28.10.2024, 22:45:33"
     }
   ],
   "weeks": [

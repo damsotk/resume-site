@@ -1,0 +1,94 @@
+.background {
+    font-family: 'Bebas Neue', sans-serif;
+    color: #C0C0C0;
+    padding: 0px 20px 0px 20px;
+    background-color: #000;
+}
+
+.flexForInputsWeeklyAffairs {
+    display: flex;
+    gap: 10px;
+}
+
+.flexForInputsWeeklyAffairs input {
+    background-color: #000;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    color: #C0C0C0;
+    font-size: 20px;
+}
+
+.cardsContainerWeekly {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.weekCard {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 10px;
+    z-index: 10;
+}
+
+.weekTasks {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.weekDay {
+    font-size: 25px;
+}
+
+.weekTask {
+    margin-bottom: 10px;
+}
+
+.buttonsForWeek {
+    display: flex;
+    gap: 10px;
+}
+
+.buttonForWeek {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 5px 0px 5px 0px;
+    font-size: 17px;
+    text-align: center;
+    cursor: pointer;
+    width: 50%;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+}
+
+.modal-content {
+    max-width: 600px;
+}
+
+.week-days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.day-container {
+    width: 150px;
+}
+
+select {
+    margin-top: 10px;
+}
