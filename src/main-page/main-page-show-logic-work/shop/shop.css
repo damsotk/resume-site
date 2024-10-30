@@ -1,0 +1,83 @@
+.mainPageShowLogicShop .background {
+    overflow-y: hidden;
+    height: auto;
+}
+
+
+.shopAllProducts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.shopProduct {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.5s ease;
+}
+
+.productName {
+    font-size: 20px;
+    width: 250px;
+    border-bottom: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.productPrice {
+    font-size: 30px;
+}
+
+.productImage {
+    width: 250px;
+    height: 250px;
+    border-radius: 20px;
+    position: relative;
+}
+
+
+/* sales */
+
+.marquee {
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    color: #C0C0C0;
+    font-family: 'Bebas Neue', sans-serif;
+    background-color: #4D4D4D;
+    font-size: 20px;
+    position: sticky;
+}
+
+.marquee-inner {
+    display: flex;
+    width: max-content;
+    animation: marquee 10s linear infinite;
+}
+
+.marquee span {
+    display: inline-block;
+    padding-right: 100px;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(150%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.noProducts {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    font-size: 40px;
+}

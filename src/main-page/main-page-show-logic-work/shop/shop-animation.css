@@ -1,0 +1,115 @@
+.icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #d4d4d4;
+    transition: all 0.4s ease;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+.icon::before,
+.icon::after {
+    content: '';
+    position: absolute;
+    background-color: #262626;
+    transition: all 0.4s ease;
+}
+
+.icon.plus::before {
+    width: 15px;
+    height: 2px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.icon.plus::after {
+    width: 2px;
+    height: 15px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.icon.checked::before {
+    width: 8px;
+    height: 2px;
+    top: 56%;
+    left: 30%;
+    transform: translate(-50%, -50%) rotate(-135deg);
+}
+
+.icon.checked::after {
+    width: 15px;
+    height: 2px;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%) rotate(145deg);
+}
+
+.icon.checked {
+    background-color: #17892a;
+}
+
+.buyButton {
+    position: absolute;
+    bottom: 70px;
+    width: 250px;
+    height: 20px;
+    background: #d4d4d4;
+    color: #262626;
+    border-radius: 0px 0px 20px 20px;
+    padding: 10px 0;
+    text-align: center;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease
+}
+
+.shopProduct:hover .buyButton {
+    opacity: 1;
+}
+
+.buyButton:hover {
+    cursor: pointer;
+}
+
+.buyButtonText {
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.buyButtonText.old {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.buyButtonText.new {
+    transform: translateY(150%);
+    opacity: 0;
+}
+
+.buyButton:hover .buyButtonText.old {
+    transform: translateY(-150%);
+    opacity: 0;
+}
+
+.buyButton:hover .buyButtonText.new {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.buyButton:hover {
+    background-color: #17892a;
+}
+
+.shopProduct:hover {
+    transform: scale(1.05);
+}
+

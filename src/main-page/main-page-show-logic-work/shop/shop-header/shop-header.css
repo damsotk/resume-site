@@ -1,0 +1,76 @@
+
+
+
+.headerShop {
+    background-color: #262626;
+    display: flex;
+    align-items: center;
+    color: #c0c0c0;
+    justify-content: space-between;
+    padding: 10px 10px 10px 10px;
+}
+
+.headerShop .logo::after {
+    content: "CLOTHES";
+    position: absolute;
+    font-size: 15px;
+    bottom: 0px;
+    left: 2px;
+}
+
+.shopSearch {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.shopSearch input {
+    all: unset;
+    background-image: url(../../../../all-images/search-interface-symbol.png);
+    background-repeat: no-repeat;
+    background-size: 17px;
+    background-position-x: 15px;
+    background-position-y: center;
+    background-color: white;
+    padding: 7px;
+    padding-left: 45px;
+    width: 30%;
+    height: 20px;
+    border-radius: 5px 0px 0px 5px;
+    color: black;
+    border: none;
+}
+
+.shopSearch .button {
+    padding: 7px;
+    height: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    color: #C0C0C0;
+    display: flex;
+    font-size: 17px;
+    align-items: center;
+    border-radius: 0px 5px 5px 0px;
+    background-color: #4e4c4c;
+}
+
+.shopUserInfo {
+    display: flex;
+    gap: 20px;
+}
+
+.shopUserInfo .shopProfile {
+    background-image: url(../../../../all-images/profile-user.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 32px;
+    height: 32px;
+}
+
+.shopUserInfo .shopBasket {
+    background-image: url(../../../../all-images/cart.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 32px;
+    height: 32px;
+}

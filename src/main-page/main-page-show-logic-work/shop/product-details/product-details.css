@@ -1,0 +1,240 @@
+.backgroundShop {
+    background-color: #000;
+    height: auto;
+}
+
+
+.productDetailsFlex {
+    display: flex;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    gap: 10px;
+    color: #C0C0C0;
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+.productDetailsFlex img {
+    border-radius: 20px;
+    width: 470px;
+    height: 470px;
+    border: 3px solid white;
+    padding: 4px;
+}
+
+.productDetails {
+    overflow: visible;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    border: 1px solid #252525;
+    padding: 30px 35px 15px;
+    border-radius: 20px;
+    width: 600px;
+}
+
+.productDetails .productDetailsName {
+    font-size: 40px;
+}
+
+.productDetails .productDetailDesc {
+    font-size: 25px;
+}
+
+.productDetails .productAllChar {
+    bottom: 1;
+}
+
+.productDetails .productAllChar .productChar {
+    font-size: 25px;
+}
+
+.productDetails .productSeller {
+    font-size: 25px;
+}
+
+.productDetails .productPrice {
+    font-size: 30px;
+}
+
+.productColorChooses,
+.productSizeChooses {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.productColorChoose,
+.productSizeChoose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    width: 50px;
+    height: 50px;
+    border-radius: 30%;
+    border: 1px solid #5a5a5a;
+    transition: all 0.5s;
+}
+
+.productSizeChoose:hover {
+    background-color: rgb(122, 122, 122);
+    cursor: pointer;
+}
+
+.productDetails .productBeat {
+    background-image: url(http://localhost:3000/images/imageForBeat.png);
+    width: 150px;
+    height: 150px;
+    background-size: cover;
+    position: absolute;
+    right: -70px;
+    top: 5px;
+    transition: all 1s;
+}
+
+.productBeatTwo {
+    background-image: url(http://localhost:3000/images/imageForBeat.png);
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    position: absolute;
+    left: -30px;
+    bottom: -50px;
+    transform: rotate(30deg);
+    transition: all 0.5s;
+}
+
+.productDetails:hover .productBeat {
+    scale: 0.7;
+}
+
+.productDetails:hover .productBeatTwo {
+    scale: 1.5;
+    position: absolute;
+}
+
+.productQuantityContainer {
+    display: flex;
+    margin-top: 20px;
+    transition: all 0.5s;
+}
+
+.productQuantity {
+    font-size: 30px;
+    display: flex;
+    border-top: 1px solid #5a5a5a;
+    border-bottom: 1px solid #5a5a5a;
+    align-items: center;
+    justify-content: center;
+}
+
+.productQuantityContainer .productHowMuch,
+.productHowMuch2 {
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #5a5a5a;
+    transition: all 0.5s;
+}
+
+.productQuantityContainer .productHowMuch {
+    border-radius: 30% 0% 0% 30%;
+    border-right: none;
+}
+
+.productQuantityContainer .productHowMuch2 {
+    border-left: none;
+    border-radius: 0% 30% 30% 0%;
+}
+
+.productHowMuch:hover {
+    cursor: pointer;
+    scale: 1.05;
+    border-right: 1px solid #5a5a5a;
+}
+
+.productHowMuch2:hover {
+    border-left: 1px solid #5a5a5a;
+    cursor: pointer;
+    scale: 1.05;
+}
+
+.productDetailContainer {
+    display: flex;
+    gap: 10px;
+}
+
+.productDetailBuy {
+    border: 1px solid #5a5a5a;
+    width: 115px;
+    height: 50px;
+    margin-top: 20px;
+    background-color: white;
+    color: black;
+    border-radius: 20%;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s;
+}
+
+.productDetailBuy:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.productDetailsNav {
+    color: #C0C0C0;
+    width: 100%;
+    display: flex;
+    height: 30px;
+    gap: 20px;
+    border-top: 1px solid #252525;
+    margin-top: 25px;
+    justify-content: center;
+}
+
+.productDetailsNavButton {
+    margin-top: 30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 25px;
+}
+
+.productDetailsNavButton:hover {
+    border-bottom: 2px solid white;
+    height: 100%;
+    cursor: pointer;
+}
+
+.angelina {
+    display: flex;
+    justify-content: center;
+}
+
+.productDetailsContent {
+    color: white;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.productDesc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.productDetailDesc {
+    width: 45%;
+}
+
+.productRecom {
+    /* width: 20%; */
+}
