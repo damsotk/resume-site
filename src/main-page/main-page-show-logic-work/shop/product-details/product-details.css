@@ -74,7 +74,7 @@
     width: 50px;
     height: 50px;
     border-radius: 30%;
-    border: 1px solid #5a5a5a;
+    border: 3px solid #5a5a5a;
     transition: all 0.5s;
 }
 
@@ -124,8 +124,8 @@
 .productQuantity {
     font-size: 30px;
     display: flex;
-    border-top: 1px solid #5a5a5a;
-    border-bottom: 1px solid #5a5a5a;
+    border-top: 3px solid #5a5a5a;
+    border-bottom: 3px solid #5a5a5a;
     align-items: center;
     justify-content: center;
 }
@@ -138,7 +138,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #5a5a5a;
+    border: 3px solid #5a5a5a;
     transition: all 0.5s;
 }
 
@@ -155,16 +155,22 @@
 .productHowMuch:hover {
     cursor: pointer;
     scale: 1.05;
-    border-right: 1px solid #5a5a5a;
+    border-right: 3px solid #5a5a5a;
 }
 
 .productHowMuch2:hover {
-    border-left: 1px solid #5a5a5a;
+    border-left: 3px solid #5a5a5a;
     cursor: pointer;
     scale: 1.05;
 }
 
 .productDetailContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.productDetailContainer .flexForButtons {
     display: flex;
     gap: 10px;
 }
@@ -176,7 +182,7 @@
     margin-top: 20px;
     background-color: white;
     color: black;
-    border-radius: 20%;
+    border-radius: 20px;
     font-size: 20px;
     display: flex;
     align-items: center;
@@ -227,14 +233,42 @@
 
 .productDesc {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+    padding-left: 20px;
+    padding-right: 20px;
+    align-items: start;
 }
 
 .productDetailDesc {
-    width: 45%;
+    width: 46%;
 }
 
 .productRecom {
-    /* width: 20%; */
+    background-color: #252525;
+    padding: 20px;
+    width: 50%;
+    margin-left: 10px;
+}
+
+.productRecomText {
+    font-size: 20px;
+}
+
+.productRecomIconFlex {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.productRecomIcon {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 300px;
+}
+
+.productRecomIcon img {
+    width: 32px;
+    height: 32px;
 }

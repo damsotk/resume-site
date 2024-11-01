@@ -56,16 +56,18 @@ function ProductDetails() {
             ))}
           </div>
           <div className='productDetailContainer'>
-            <div className='productQuantityContainer'>
-              <div className='productHowMuch' onClick={decreaseQuantity}>-</div>
-              <div className='productQuantity'>{quantity}</div>
-              <div className='productHowMuch2' onClick={increaseQuantity}>+</div>
+            <div className='flexForButtons'>
+              <div className='productQuantityContainer'>
+                <div className='productHowMuch' onClick={decreaseQuantity}>-</div>
+                <div className='productQuantity'>{quantity}</div>
+                <div className='productHowMuch2' onClick={increaseQuantity}>+</div>
+              </div>
+              <div className='productDetailBuy' style={{width: "100%"}}>
+                ADD TO WISHLIST
+              </div>
             </div>
-            <div className='productDetailBuy'>
+            <div className='productDetailBuy' style={{width: "100%"}}>
               BUY NOW
-            </div>
-            <div className='productDetailBuy'>
-              ADD TO WISHLIST
             </div>
           </div>
         </div>
@@ -95,10 +97,32 @@ function ProductDetails() {
       <div className='productDetailsContent'>
         {activeTab === 'description' && <div className='productDesc'>
           <div className='productDetailDesc'>
-            <div style={{fontSize: 25, marginBottom: "10px"}}>{product.name}</div>
+            <div style={{ fontSize: 25, marginBottom: "10px" }}>{product.name}</div>
             <div>{product.description}</div>
           </div>
-          <div className='productRecom'>12312312312312312412312</div>
+          <div className='productRecom'>
+            <div className='productRecomText'>Recommendations for care:</div>
+            <div className='productRecomIconFlex'>
+              <div className='productRecomIcon'>
+                <img src={`http://localhost:3000/images/washer.png`} alt="iconNo" />
+                <div>Do not wash</div>
+              </div>
+              <div className='productRecomIcon'>
+                <img src={`http://localhost:3000/images/paint-roller.png`} alt="iconNo" />
+                <div>Do not bleach</div>
+              </div>
+            </div>
+            <div className='productRecomIconFlex'>
+              <div className='productRecomIcon'>
+                <img src={`http://localhost:3000/images/dryer.png`} alt="iconNo" />
+                <div>Do not dry in a tumble dryer</div>
+              </div>
+              <div className='productRecomIcon'>
+                <img src={`http://localhost:3000/images/steam-iron.png`} alt="iconNo" />
+                <div>Do not iron</div>
+              </div>
+            </div>
+          </div>
           {/* <div className='productSeller'>Seller: {product.seller}</div> */}
         </div>}
         {activeTab === 'additional' && <div style={{ color: "white" }}>
