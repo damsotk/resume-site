@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ShopHeader from './shop-header/shop-header';
+import ShopFooter from './shop-footer/shop-footer'
 import './shop.css';
 import './shop-animation.css';
 
@@ -76,6 +77,7 @@ function Shop() {
           <div className='noProducts'>No products available, sorry bro</div>
         )}
       </div>
+      <ShopFooter />
     </div>
   );
 }

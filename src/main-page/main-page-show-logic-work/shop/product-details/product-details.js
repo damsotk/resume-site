@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ShopHeader from '../shop-header/shop-header';
+import './product-details-animations.css'
 import './product-details.css'
+import ShopFooter from '../shop-footer/shop-footer';
 import { color } from 'chart.js/helpers';
 
 function ProductDetails() {
@@ -62,11 +64,11 @@ function ProductDetails() {
                 <div className='productQuantity'>{quantity}</div>
                 <div className='productHowMuch2' onClick={increaseQuantity}>+</div>
               </div>
-              <div className='productDetailBuy' style={{width: "100%"}}>
+              <div className='productDetailBuy' style={{ width: "100%" }}>
                 ADD TO WISHLIST
               </div>
             </div>
-            <div className='productDetailBuy' style={{width: "100%"}}>
+            <div className='productDetailBuy' style={{ width: "100%" }}>
               BUY NOW
             </div>
           </div>
@@ -97,43 +99,39 @@ function ProductDetails() {
       <div className='productDetailsContent'>
         {activeTab === 'description' && <div className='productDesc'>
           <div className='productDetailDesc'>
-            <div style={{ fontSize: 25, marginBottom: "10px" }}>{product.name}</div>
-            <div>{product.description}</div>
+            <div style={{ fontSize: 45 }}>{product.name}</div>
+            <div style={{ fontSize: 25 }}>{product.description}</div>
           </div>
-          <div className='productRecom'>
-            <div className='productRecomText'>Recommendations for care:</div>
-            <div className='productRecomIconFlex'>
-              <div className='productRecomIcon'>
-                <img src={`http://localhost:3000/images/washer.png`} alt="iconNo" />
-                <div>Do not wash</div>
-              </div>
-              <div className='productRecomIcon'>
-                <img src={`http://localhost:3000/images/paint-roller.png`} alt="iconNo" />
-                <div>Do not bleach</div>
-              </div>
+          <div className='productDetailDescRecom'>
+            <div className='productRecomIcon'>
+              <img src={`http://localhost:3000/images/dryer.png`} alt="iconNo" />
+              <div>Do not dry in a tumble dryer</div>
             </div>
-            <div className='productRecomIconFlex'>
-              <div className='productRecomIcon'>
-                <img src={`http://localhost:3000/images/dryer.png`} alt="iconNo" />
-                <div>Do not dry in a tumble dryer</div>
-              </div>
-              <div className='productRecomIcon'>
-                <img src={`http://localhost:3000/images/steam-iron.png`} alt="iconNo" />
-                <div>Do not iron</div>
-              </div>
+            <div className='productRecomIcon'>
+              <img src={`http://localhost:3000/images/washer.png`} alt="iconNo" />
+              <div>Do not wash</div>
+            </div>
+            <div className='productRecomIcon'>
+              <img src={`http://localhost:3000/images/paint-roller.png`} alt="iconNo" />
+              <div>Do not bleach</div>
+            </div>
+            <div className='productRecomIcon'>
+              <img src={`http://localhost:3000/images/steam-iron.png`} alt="iconNo" />
+              <div>Do not iron</div>
             </div>
           </div>
           {/* <div className='productSeller'>Seller: {product.seller}</div> */}
         </div>}
-        {activeTab === 'additional' && <div style={{ color: "white" }}>
+        {activeTab === 'additional' && <div className='additionalFlex'>
           {Object.entries(product.characteristics).map(([key, value]) => (
-            <div key={key} className='productChar'>
+            <div key={key} className='additionalInfo'>
               {value}
             </div>
           ))}
         </div>}
         {activeTab === 'reviews' && <p>Here are the reviews.</p>}
       </div>
+      <ShopFooter />
 
     </div>
   );

@@ -3,7 +3,6 @@
     height: auto;
 }
 
-
 .shopAllProducts {
     display: flex;
     flex-wrap: wrap;
@@ -11,6 +10,7 @@
     justify-content: center;
     margin-top: 20px;
     width: 100%;
+    margin-bottom: 30px;
 }
 
 .shopProduct {

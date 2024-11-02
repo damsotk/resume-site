@@ -1,0 +1,34 @@
+.footerFlex {
+    background-color: #000;
+    border-top: 3px solid #252525;
+    color: rgb(137, 137, 137);
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+ul {
+    margin: 0;
+    list-style-type: none;
+    padding: 0;
+}
+
+ul span {
+    font-size: 30px;
+}
+
+ul li {
+    font-size: 20px;
+}
+
+.tableInfoFooterShop {
+    padding: 30px;
+}
+
+.tablesFlexShop {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.tableInfoFooterShop .logo{
+    position: relative;
+}
