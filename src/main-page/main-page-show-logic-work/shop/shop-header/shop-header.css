@@ -2,12 +2,16 @@
 
 
 .headerShop {
-    background-color: #262626;
+    background-color: #000;
+    border: 3px solid gray;
+    border-radius: 30px;
     display: flex;
     align-items: center;
     color: #c0c0c0;
     justify-content: space-between;
-    padding: 10px 10px 10px 10px;
+    padding: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 .headerShop .logo::after {
@@ -27,7 +31,7 @@
 }
 .shopSearch input {
     all: unset;
-    background-image: url(../../../../all-images/search-interface-symbol.png);
+    /* background-image: url(../../../../all-images/search-interface-symbol.png); */
     background-repeat: no-repeat;
     background-size: 17px;
     background-position-x: 15px;
@@ -56,21 +60,6 @@
 
 .shopUserInfo {
     display: flex;
+    align-items: center;
     gap: 20px;
-}
-
-.shopUserInfo .shopProfile {
-    background-image: url(../../../../all-images/profile-user.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 32px;
-    height: 32px;
-}
-
-.shopUserInfo .shopBasket {
-    background-image: url(../../../../all-images/cart.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 32px;
-    height: 32px;
 }

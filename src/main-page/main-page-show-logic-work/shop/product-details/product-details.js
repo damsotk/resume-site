@@ -1,15 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import ShopHeader from '../shop-header/shop-header';
-import './product-details-animations.css'
 import './product-details.css'
+import './product-details-animation.css'
 import ShopFooter from '../shop-footer/shop-footer';
-import { color } from 'chart.js/helpers';
+import useBallsAnimation from '../../../hooks/useBallsAnimation';
 
 function ProductDetails() {
+  const balls = useBallsAnimation();
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [activeTab, setActiveTab] = useState('description');
+
+  const [addedProducts, setAddedProducts] = useState({});
+
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+
+  const [otherProducts, setOtherProducts] = useState([]);
+  const [visibleProducts, setVisibleProducts] = useState(4);
+
+  const handleClick = (productId) => {
+    console.log(productId)
+    setAddedProducts(prevState => ({
+      ...prevState,
+      [productId]: !prevState[productId]
+    }));
+  };
 
   useEffect(() => {
     fetch(`http://localhost:3000/api/products/${id}`)
@@ -17,6 +32,43 @@ function ProductDetails() {
       .then(data => setProduct(data))
       .catch(error => console.error('Error fetching product details:', error));
   }, [id]);
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/products/${id}`)
+      .then(response => response.json())
+      .then(data => setProduct(data))
+      .catch(error => console.error('Error fetching product details:', error));
+
+    fetch('http://localhost:3000/api/products')
+      .then(response => response.json())
+      .then(data => {
+        setOtherProducts(data);
+      })
+      .catch(error => console.error('Error fetching other products:', error));
+  }, [id]);
+
+  const loadMoreProducts = () => {
+    setVisibleProducts(prevVisible => prevVisible + 4);
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      const { clientX, clientY } = event;
+      const { innerWidth, innerHeight } = window;
+
+      const newLeft = clientX / innerWidth * 20;
+      const newTop = clientY / innerHeight * 20;
+
+      setPosition({ top: newTop, left: newLeft });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
 
   const [quantity, setQuantity] = useState(1);
   const increaseQuantity = () => {
@@ -33,12 +85,62 @@ function ProductDetails() {
     return <p>Loading...</p>;
   }
 
+  const renderAnimatedText = (text) => {
+    return text.split('').map((char, i) => (
+      <span
+        key={i}
+        style={{
+          transform: `rotate(${i * 10.3}deg)`,
+          position: 'absolute',
+          left: '50%',
+          transformOrigin: '0 300px',
+          fontSize: '1.5em',
+        }}
+      >
+        {char}
+      </span>
+    ));
+  };
+
   return (
     <div className='backgroundShop'>
-      <ShopHeader />
+      <div className='containerForBalls'></div>
+      <div style={{ position: 'sticky', top: '10px', zIndex: '11', marginBottom: '20px' }}>
+        <div className="headerShop">
+          <div className="buttonBack">
+            BACK
+          </div>
+          <div className='shopAllCost'>$0.00</div>
+          <div className='productSocialHeader'>
+            <img src={`http://localhost:3000/images/instagram.png`} alt="instagram" />
+            <img src={`http://localhost:3000/images/facebook.png`} alt="facebook" />
+            <img src={`http://localhost:3000/images/twitter.png`} alt="twitter" />
+            <img src={`http://localhost:3000/images/youtube.png`} alt="youtube" />
+          </div>
+        </div>
+      </div>
       <div className='productDetailsFlex'>
-        <img src={`http://localhost:3000${product.imageUrl}`} alt={product.name} />
-        <div className='productDetails'>
+        <div className='productShopName' style={{ backgroundImage: `url("http://localhost:3000/images/texture_black.jpg")` }}>
+          <div
+            className='imageProductShop'
+            style={{
+              backgroundImage: `url("http://localhost:3000${product.imageUrl}")`,
+              transform: `translate(${position.left}px, ${-position.top}px)`
+            }}
+          />
+          {product.name && product.name.split(' ').map((word, index, array) => {
+            if (index === 0) {
+              return <div key={index} className="productNameOne">{word}</div>;
+            } else if (index === 1) {
+              return <div key={index} className="productNameTwo">{word}</div>;
+            } else if (index === 2) {
+              const remainingWords = array.slice(index).join(' ');
+              return <div key={index} className="productNameThree">{remainingWords}</div>;
+            }
+            return null;
+          })}
+        </div>
+        {/* <div className='productDetails'>
           <div className='productDetailsName'>{product.name}</div>
           <div className='productPrice'>${product.price}</div>
           <div className='productBeat'></div>
@@ -72,67 +174,119 @@ function ProductDetails() {
               BUY NOW
             </div>
           </div>
+        </div> */}
+      </div>
+      <div className='buyOrDie'>
+        <div className='productBuyNowButton'>
+          BUY NOW
+        </div>
+        <div className='productAddToCartButton'>
+          ADD TO CART
         </div>
       </div>
-      <div className='angelina'>
-        <div className='productDetailsNav'>
-          <div
-            className={`productDetailsNavButton ${activeTab === 'description' ? 'productTargetInfo' : ''}`}
-            onClick={() => setActiveTab('description')}
-          >
-            description
-          </div>
-          <div
-            className={`productDetailsNavButton ${activeTab === 'additional' ? 'productTargetInfo' : ''}`}
-            onClick={() => setActiveTab('additional')}
-          >
-            additional information
-          </div>
-          <div
-            className={`productDetailsNavButton ${activeTab === 'reviews' ? 'productTargetInfo' : ''}`}
-            onClick={() => setActiveTab('reviews')}
-          >
-            reviews
-          </div>
+      <div className='productDetailsNav'>
+        <div
+          className={`productDetailsNavButton ${activeTab === 'description' ? 'productTargetInfo' : ''}`}
+          onClick={() => setActiveTab('description')}
+        >
+          description
+        </div>
+        <div
+          className={`productDetailsNavButton ${activeTab === 'additional' ? 'productTargetInfo' : ''}`}
+          onClick={() => setActiveTab('additional')}
+        >
+          additional information
+        </div>
+        <div
+          className={`productDetailsNavButton ${activeTab === 'reviews' ? 'productTargetInfo' : ''}`}
+          onClick={() => setActiveTab('reviews')}
+        >
+          reviews
         </div>
       </div>
       <div className='productDetailsContent'>
         {activeTab === 'description' && <div className='productDesc'>
-          <div className='productDetailDesc'>
-            <div style={{ fontSize: 45 }}>{product.name}</div>
-            <div style={{ fontSize: 25 }}>{product.description}</div>
-          </div>
-          <div className='productDetailDescRecom'>
-            <div className='productRecomIcon'>
-              <img src={`http://localhost:3000/images/dryer.png`} alt="iconNo" />
-              <div>Do not dry in a tumble dryer</div>
+          <div className='productDescImages'>
+            <div className='productDescImage' style={{ backgroundImage: `url("http://localhost:3000${product.imageUrl}")` }}>
             </div>
-            <div className='productRecomIcon'>
-              <img src={`http://localhost:3000/images/washer.png`} alt="iconNo" />
-              <div>Do not wash</div>
-            </div>
-            <div className='productRecomIcon'>
-              <img src={`http://localhost:3000/images/paint-roller.png`} alt="iconNo" />
-              <div>Do not bleach</div>
-            </div>
-            <div className='productRecomIcon'>
-              <img src={`http://localhost:3000/images/steam-iron.png`} alt="iconNo" />
-              <div>Do not iron</div>
+            {/* <div className='productDescImageBack' style={{ backgroundImage: `url("http://localhost:3000/images/texture_black3.jpg")` }} > </div> */}
+            <div className="animCircleText">
+              {renderAnimatedText('damsot.shop hope you are like this')}
             </div>
           </div>
-          {/* <div className='productSeller'>Seller: {product.seller}</div> */}
+          <div className='productDescInfo'>
+            <div className='productDetailDesc'>
+              <div style={{ fontSize: 45 }}>{product.name}</div>
+              <div style={{ fontSize: 25 }}>{product.description}</div>
+              <div className='productDetailDescAdditional'>
+                {Object.entries(product.characteristics).map(([key, value]) => (
+                  <div key={key} className='additionalInfo'>
+                    {value}
+                  </div>
+                ))}
+                <div className='additionalInfo'>Seller: {product.seller}</div>
+              </div>
+            </div>
+            <div className='productDetailDescRecom'>
+              <div className='productRecomIcon'>
+                <img src={`http://localhost:3000/images/dryer.png`} alt="iconNo" />
+                <div>Do not dry in a tumble dryer</div>
+              </div>
+              <div className='productRecomIcon'>
+                <img src={`http://localhost:3000/images/washer.png`} alt="iconNo" />
+                <div>Do not wash</div>
+              </div>
+              <div className='productRecomIcon'>
+                <img src={`http://localhost:3000/images/paint-roller.png`} alt="iconNo" />
+                <div>Do not bleach</div>
+              </div>
+              <div className='productRecomIcon'>
+                <img src={`http://localhost:3000/images/steam-iron.png`} alt="iconNo" />
+                <div>Do not iron</div>
+              </div>
+            </div>
+          </div>
         </div>}
         {activeTab === 'additional' && <div className='additionalFlex'>
-          {Object.entries(product.characteristics).map(([key, value]) => (
-            <div key={key} className='additionalInfo'>
-              {value}
-            </div>
-          ))}
+          here add
         </div>}
         {activeTab === 'reviews' && <p>Here are the reviews.</p>}
       </div>
-      <ShopFooter />
+      <div className='otherProducts'>
+        <div className='textForOtherProductBig'>
+          MOOOOOOORE
+          <div className='textForOtherProductSmall'>
+            CLOTHES
+          </div>
+        </div>
+        <div className='shopAllProducts'>
+          {otherProducts.slice(0, visibleProducts).map((otherProduct) => (
+            <div key={otherProduct.id} className='shopProduct'>
+              <div onClick={() => handleClick(otherProduct.id)} className={`icon ${addedProducts[otherProduct.id] ? 'checked' : 'plus'}`}></div>
+              <img style={{ position: 'relative' }} src={`http://localhost:3000${otherProduct.imageUrl}`} className="productImage" alt={otherProduct.name} />
+              <div className="productInfo">
+                <div className="productName">
+                  {otherProduct.name}
+                </div>
+                <div className="productPrice">
+                  ${otherProduct.price}
+                </div>
+              </div>
+              <div className="buyButton">
+                <div className="buyButtonText old">Nice choice!</div>
+                <div className="buyButtonText new">Buy Now!</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        {visibleProducts < otherProducts.length && (
+          <button onClick={loadMoreProducts} className='loadMoreButton'>
+            Load More
+          </button>
+        )}
+      </div>
 
+      <ShopFooter />
     </div>
   );
 }

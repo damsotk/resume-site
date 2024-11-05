@@ -3,6 +3,8 @@
     border-top: 3px solid #252525;
     color: rgb(137, 137, 137);
     font-family: 'Bebas Neue', sans-serif;
+    z-index: 10;
+    position: relative;
 }
 
 ul {

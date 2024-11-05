@@ -15,13 +15,28 @@
 
 .shopProduct {
     display: flex;
+    background-color: rgb(39, 39, 39);
+    padding: 20px;
+    border-radius: 20px;
+    z-index: 10;
     flex-direction: column;
     position: relative;
     transition: transform 0.5s ease;
 }
 
+.shopProduct:hover {
+    cursor: pointer;
+}
+
+.shopProduct img {
+    background-color: white;
+    width: 300px;
+    height: 300px;
+    border-radius: 20px;
+}
+
 .productName {
-    font-size: 20px;
+    font-size: 35px;
     width: 250px;
     border-bottom: none;
     white-space: nowrap;
@@ -30,49 +45,7 @@
 }
 
 .productPrice {
-    font-size: 30px;
-}
-
-.productImage {
-    width: 250px;
-    height: 250px;
-    border-radius: 20px;
-    position: relative;
-}
-
-
-/* sales */
-
-.marquee {
-    width: 100%;
-    overflow: hidden;
-    box-sizing: border-box;
-    color: #C0C0C0;
-    font-family: 'Bebas Neue', sans-serif;
-    background-color: #4D4D4D;
-    font-size: 20px;
-    position: sticky;
-}
-
-.marquee-inner {
-    display: flex;
-    width: max-content;
-    animation: marquee 10s linear infinite;
-}
-
-.marquee span {
-    display: inline-block;
-    padding-right: 100px;
-}
-
-@keyframes marquee {
-    0% {
-        transform: translateX(150%);
-    }
-
-    100% {
-        transform: translateX(-100%);
-    }
+    font-size: 40px;
 }
 
 .noProducts {

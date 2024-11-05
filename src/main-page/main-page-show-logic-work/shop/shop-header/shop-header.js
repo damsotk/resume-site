@@ -10,7 +10,7 @@ function ShopHeader({ onSearch }) {
     };
 
     return (
-        <div style={{ position: 'sticky', top: '0', zIndex: '3' }}>
+        <div style={{ position: 'sticky', top: '20px', zIndex: '3' }}>
             <div className="headerShop">
                 <div className="logo">
                     DAMSOT
@@ -23,17 +23,6 @@ function ShopHeader({ onSearch }) {
                         placeholder="hm, i wanna..."
                     />
                     <div className="button" onClick={() => onSearch(searchQuery)}>Search</div>
-                </div>
-                <div className="shopUserInfo">
-                    <div className="shopProfile"></div>
-                    <div className="shopBasket"></div>
-                </div>
-            </div>
-            <div className="marquee">
-                <div className="marquee-inner">
-                    <span>Where are born this sales, wtf?!</span>
-                    <span>First purchase - free shipping!</span>
-                    <span>I think you have good taste if you are here</span>
                 </div>
             </div>
         </div>

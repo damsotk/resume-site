@@ -11,6 +11,7 @@ function Shop() {
   const [addedProducts, setAddedProducts] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
 
+
   useEffect(() => {
     fetch('http://localhost:3000/api/products')
       .then(response => response.json())
@@ -43,18 +44,14 @@ function Shop() {
   return (
     <div className='mainPageShowLogicShop'>
       <ShopHeader onSearch={handleSearch} />
+      <div className='containerForBalls'></div>
+
       <div className="background">
         {filteredProducts.length > 0 ? (
           <div className="shopAllProducts">
             {filteredProducts.map(product => (
-              <div
-                key={product.id}
-                className="shopProduct"
-              >
-                <div
-                  onClick={() => handleClick(product.id)}
-                  className={`icon ${addedProducts[product.id] ? 'checked' : 'plus'}`}
-                ></div>
+              <div key={product.id}className="shopProduct">
+                <div onClick={() => handleClick(product.id)} className={`icon ${addedProducts[product.id] ? 'checked' : 'plus'}`}></div>
                 <Link to={`/shop/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <img style={{ position: 'relative' }} src={`http://localhost:3000${product.imageUrl}`} className="productImage" alt={product.name} />
                   <div className="productInfo">
