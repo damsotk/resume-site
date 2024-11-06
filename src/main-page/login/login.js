@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './login.css';
 
 const Login = ({ setToken }) => {
     const [username, setUsername] = useState('');
@@ -18,26 +19,42 @@ const Login = ({ setToken }) => {
         if (response.ok) {
             setToken(data.token);
         } else {
-            alert(data.message); 
+            alert(data.message);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button type="submit">Login</button>
-        </form>
+        <div className='backgroundLogin'>
+            <div className='loginPlace'>
+                <form className='loginPlaceForm' onSubmit={handleSubmit}>
+                    <div className='logoForLogin'>DAMSOT</div>
+                    <div className='loginPlaceFormDesign'></div>
+                    <div className='loginPlaceFormDesignT'></div>
+                    <div className='boxForLogin'>
+                        <div className='infoForLogin'>your login</div>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                    </div>
+
+                    <div className='boxForLogin'>
+                        <div className='infoForLogin'>your password</div>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+                    <button className='buttonForLogin'>LOGIN</button>
+                </form>
+                <div className='textWhereAccount'>The website does not have the option to create an account. If you have somehow arrived here, it means the website owner must have given you a username and password for the account! Have fun!</div>
+
+            </div>
+        </div>
+
+
     );
 };
 
