@@ -9,7 +9,8 @@ import CompletedAffairs from './main-page/main-page-show-logic-work/to-do-list/c
 import Shop from './main-page/main-page-show-logic-work/shop/shop';
 import ProductDetails from './main-page/main-page-show-logic-work/shop/product-details/product-details';
 import Login from './main-page/login/login';
-import ProtectedRoute from './main-page/login/protected-route/ProtectedRoute'; 
+import ProtectedRoute from './main-page/login/protected-route/ProtectedRoute';
+import Messanger from './main-page/main-page-show-logic-work/messanger/messanger';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -58,6 +59,11 @@ function App() {
           <Route path="/shop/products/:id" element={
             <ProtectedRoute token={token}>
               <ProductDetails />
+            </ProtectedRoute>
+          } />
+          <Route path="/messanger" element={
+            <ProtectedRoute token={token}>
+              <Messanger />
             </ProtectedRoute>
           } />
         </Routes>
