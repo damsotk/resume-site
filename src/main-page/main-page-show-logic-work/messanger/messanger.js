@@ -68,7 +68,10 @@ function Messanger() {
         checkConferenceExistence(targetUserId)
             .then(response => {
                 if (response.exists) {
-                    alert('Діалог вже існує!');
+                    const existingConference = conferences.find(conference => conference.otherUserId === targetUserId);
+                    if (existingConference) {
+                        viewMessages(existingConference.id);
+                    }
                 } else {
                     const token = localStorage.getItem('token');
                     fetch('http://localhost:3000/api/conference', {
@@ -81,11 +84,12 @@ function Messanger() {
                     })
                         .then(response => response.json())
                         .then(data => {
-                            if (data.message === 'Діалог створено') {
-                                alert('Діалог створено!');
-                                setConferences([...conferences, { id: data.dialogId, otherUserId: targetUserId }]);
+                            if (data.message === 'The dialog is created') {
+                                const newConference = { id: data.dialogId, otherUserId: targetUserId };
+                                setConferences([...conferences, newConference]);
+                                viewMessages(data.dialogId);
                             } else {
-                                alert('Помилка при створенні діалогу');
+                                alert('Error with creating dialog');
                             }
                         })
                         .catch(error => console.error('Error creating conference:', error));
@@ -121,56 +125,70 @@ function Messanger() {
     };
 
     return (
-        <div>
-            <h1>Список користувачів</h1>
-            <ul>
-                {users.map(user => (
-                    <li key={user.id}>
-                        {user.username}
-                        <button onClick={() => startConference(user.id)}>Створити діалог</button>
-                    </li>
-                ))}
-            </ul>
+        <div className='backgroundMessanger'>
 
-            <h2>Ваші діалоги</h2>
-            <ul>
-                {conferences.map(conference => (
-                    <li key={conference.id}>
-                        <button onClick={() => viewMessages(conference.id)}>
-                            Діалог з користувачем ID {conference.otherUserId}
-                        </button>
-                    </li>
-                ))}
-            </ul>
-
-            {selectedConferenceId && (
-                <div>
-                    <h3>Повідомлення</h3>
-                    <ul>
-                        {messages.map((message, index) => (
-                            <li key={index}>
-                                <strong>{message.sender_type}:</strong> {message.message}
-                                <span> ({new Date(message.created_at).toLocaleString()})</span>
-                            </li>
-                        ))}
-                    </ul>
-
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Напишіть повідомлення"
-                            value={messageText}
-                            onChange={(e) => setMessageText(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    sendMessage();
-                                }
-                            }}
-                        />
-                        <button onClick={sendMessage}>Надіслати</button>
-                    </div>
+            <div className='messangerFlex'>
+                <div className='allContacts'>
+                    {users.map(user => (
+                        <div onClick={() => startConference(user.id)} className='contactUser' key={user.id}>
+                            <div className='contactUserName'>
+                                {user.username}
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            )}
+                <div className='messangerDisplay'>
+                    {selectedConferenceId && (
+                        <div className='privateMessageFlex' style={{ color: "white" }}>
+                            <div style={{ paddingLeft: "10px", paddingRight: "10px", paddingBottom: "10px" }}>
+                                {messages.map((message, index) => {
+                                    const messageDate = new Date(message.created_at);
+                                    const currentDate = new Date();
+                                    const isToday =
+                                        messageDate.getDate() === currentDate.getDate() &&
+                                        messageDate.getMonth() === currentDate.getMonth() &&
+                                        messageDate.getFullYear() === currentDate.getFullYear();
+
+                                    return (
+                                        <div key={index} className={message.sender_type !== 'You' ? 'messageFromAnotherUser' : 'messageUser'}>
+                                            <div className='messageDesign'>
+                                                <div className='message'>
+                                                    <div className='infoForMessage'>
+                                                        <div className='messageTypePosition'>
+                                                            {message.sender_type}
+                                                        </div>
+                                                        <div className='messageDateSend'>
+                                                            {isToday
+                                                                ? messageDate.toLocaleTimeString()
+                                                                : messageDate.toLocaleDateString()} 
+                                                        </div>
+                                                    </div>
+                                                    {message.message}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <div className='boxForSendMessages'>
+                                <input
+                                    type="text"
+                                    placeholder="Message"
+                                    value={messageText}
+                                    onChange={(e) => setMessageText(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            sendMessage();
+                                        }
+                                    }}
+                                    className='sendMessageInput'
+                                />
+                                <div className='messangerSendButton' onClick={sendMessage}>Send</div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }
