@@ -6,10 +6,10 @@ function MainPageShowLogic() {
     const navigate = useNavigate();
 
     const navigateTo = (path) => {
-      navigate(path);
+        navigate(path);
     };
     return (
-        
+
         <div className='container'>
             <div className='just-flex-yo'>
                 <div className='text-greeting'>
@@ -32,12 +32,12 @@ function MainPageShowLogic() {
                             TO-DO LIST
                         </div>
                     </div>
-                    <div className='work-card' onClick={() => navigateTo('/leap-to-riches')}>
+                    <div className='work-card' onClick={() => navigateTo('/messanger')}>
                         <div className='work-screen'>
                             03
                         </div>
                         <div className='work-desc'>
-                            LEAP TO RICHES
+                            MESSANGER
                         </div>
                     </div>
                     <div className='work-card' onClick={() => navigateTo('/shop')}>
@@ -53,7 +53,7 @@ function MainPageShowLogic() {
                             05
                         </div>
                         <div className='work-desc'>
-                            MAP
+                            EXCHANGE
                         </div>
                     </div>
                     <div className='work-card'>

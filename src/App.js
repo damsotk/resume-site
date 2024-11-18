@@ -11,6 +11,7 @@ import ProductDetails from './main-page/main-page-show-logic-work/shop/product-d
 import Login from './main-page/login/login';
 import ProtectedRoute from './main-page/login/protected-route/ProtectedRoute';
 import Messanger from './main-page/main-page-show-logic-work/messanger/messanger';
+import Exchange from './main-page/main-page-show-logic-work/exchange/exchange';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -26,10 +27,10 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login setToken={handleToken} />} />
 
+          <Route path='/exchange' element={<Exchange/>}/>
+
           <Route path="/" element={
-
             <MainPage />
-
           } />
           <Route path="/movie-searcher" element={
             <ProtectedRoute token={token}>
