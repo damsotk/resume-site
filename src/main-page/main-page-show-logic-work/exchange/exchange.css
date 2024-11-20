@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Electrolize&display=swap');
+
+.exchangeBackground {
+    background-color: #000;
+    height: 100vh;
+    width: 100%;
+}
+
+.exchangeFlex {
+    height: 100vh;
+    display: flex;
+}
+
+.exchangeMenu {
+    color: white;
+    flex-grow: 1;
+}
+
+.exchangeDisplay {
+    flex-grow: 15;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.exchangeForMainInfo {
+    background-color: #1f1f1f;
+    height: 100%;
+    width: 100%;
+    border-radius: 40px;
+}
+
+.infoAboutStocks {
+    padding-left: 40px;
+    padding-right: 40px;
+    width: 70%;
+}
+
+.exchangeForMoneyInfo {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    position: relative;
+}
+
+.exchangeMoneyText {
+    position: absolute;
+    font-size: 20px;
+    font-family: "Electrolize", sans-serif;
+    color: #6a6a6a;
+}
+
+.exchangeMainBalance {
+    font-size: 80px;
+    margin-top: 30px;
+    font-family: "Electrolize", sans-serif;
+    color: #f2f2f2;
+}
+
+.exchangeBalanceStatus {
+    width: 80px;
+    color: white;
+    justify-content: space-around;
+    padding: 5px;
+    border-radius: 10px;
+    display: flex;
+}
+
+.exchangeBackUp {
+    background-color: #5a926f;
+}
+
+
+.exchangeBackDown {
+    background-color: #923737;
+}
+
+.exchangeLineStatusUp {
+    background-image: url(http://localhost:3000/images//balanceUp.png);
+    width: 20px;
+    height: 20px;
+}
+.exchangeLineStatusDown {
+    background-image: url(http://localhost:3000/images//balanceDown.png);
+    width: 20px;
+    height: 20px;
+}
+
+.exchangeStocksInfo {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #6a6a6a;
+    margin-top: 30px;
+    font-size: 17px;
+
+}
+
+.exchangeBestStocks {
+    display: flex;
+    gap: 20px;
+}
+
+.stockCard {
+    width: 200px;
+    background-color: #5447df;
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.stockNameBox {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 20px;
+}
+
+.stockLogo {
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+}
+
+.ident {
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+.stockCurrentPrice {
+    font-family: "Electrolize", sans-serif;
+    color: #f2f2f2;
+    font-size: 35px;
+    margin-bottom: 10px;
+}
