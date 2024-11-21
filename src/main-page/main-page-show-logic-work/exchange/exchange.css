@@ -7,17 +7,18 @@
 }
 
 .exchangeFlex {
-    height: 100vh;
     display: flex;
+    background-color: #000;
+
 }
 
 .exchangeMenu {
     color: white;
-    flex-grow: 1;
+    width: 5%;
 }
 
 .exchangeDisplay {
-    flex-grow: 15;
+    width: 95%;
     color: white;
     display: flex;
     justify-content: center;
@@ -27,21 +28,21 @@
 
 .exchangeForMainInfo {
     background-color: #1f1f1f;
-    height: 100%;
     width: 100%;
     border-radius: 40px;
+    display: flex;
+    padding: 40px;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .infoAboutStocks {
-    padding-left: 40px;
-    padding-right: 40px;
-    width: 70%;
+    width: auto;
 }
 
 .exchangeForMoneyInfo {
     display: flex;
     flex-direction: column;
-    margin-top: 40px;
     position: relative;
 }
 
@@ -74,7 +75,7 @@
 
 
 .exchangeBackDown {
-    background-color: #923737;
+    background-color: #b0654d;
 }
 
 .exchangeLineStatusUp {
@@ -82,6 +83,7 @@
     width: 20px;
     height: 20px;
 }
+
 .exchangeLineStatusDown {
     background-image: url(http://localhost:3000/images//balanceDown.png);
     width: 20px;
@@ -95,7 +97,11 @@
     color: #6a6a6a;
     margin-top: 30px;
     font-size: 17px;
+}
 
+.exchangeInfoBestFlex {
+    display: flex;
+    flex-direction: column;
 }
 
 .exchangeBestStocks {
@@ -104,8 +110,7 @@
 }
 
 .stockCard {
-    width: 200px;
-    background-color: #5447df;
+    width: 190px;
     border-radius: 20px;
     padding: 20px;
     margin-top: 20px;
@@ -134,4 +139,73 @@
     color: #f2f2f2;
     font-size: 35px;
     margin-bottom: 10px;
+}
+
+.exchangeBuyPlace {
+    background-color: #323232;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 21%;
+    border-radius: 20px;
+}
+
+.buyingOrSale {
+    display: flex;
+    gap: 20px;
+    color: #6a6a6a;
+    justify-content: start;
+
+}
+
+.choosenStock,
+.howMuchMoneyYouGet {
+    background-color: #262626;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.choosenStockDisp {
+    display: flex;
+    justify-content: space-between;
+}
+
+.numberOfStocks {
+    color: #6a6a6a;
+    margin-top: 15px;
+    font-family: "Electrolize", sans-serif;
+    font-size: 35px;
+    display: flex;
+    align-items: center;
+}
+
+.numberOfStocks input {
+    all: unset;
+    color: white;
+    width: 120px;
+}
+
+.howMuchMoneyYouGet {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttonFlexExchange {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.exchangeButton {
+    width: 100%;
+    background-color: #000201;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
 }

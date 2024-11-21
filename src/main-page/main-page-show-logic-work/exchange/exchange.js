@@ -34,7 +34,7 @@ const Exchange = () => {
 
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data);
-        
+
             if (message.type === 'initial') {
                 const initialStocks = {};
                 message.stocks.forEach(stock => {
@@ -65,11 +65,11 @@ const Exchange = () => {
     };
 
     const stockList = Object.values(stocks);
-    const visibleStocks = stockList.slice(0, 4); 
+    const visibleStocks = stockList.slice(0, 4);
     const hiddenStocks = stockList.slice(4);
 
 
-    return  (
+    return (
         <div className="exchangeBackground">
             <div className="exchangeFlex">
                 <div className="exchangeMenu">1</div>
@@ -93,11 +93,23 @@ const Exchange = () => {
                                 </div>
                             </div>
                             <div className="exchangeBestStocks">
-                                {visibleStocks.map((stock) => {
+                                {visibleStocks.map((stock, index) => {
                                     const isPriceUp = stock.percentageChange > 0;
+                                    const backgroundColor =
+                                        index === 1
+                                            ? '#e4ae5f'
+                                            : index === 2
+                                                ? '#e1815e'
+                                                : index === 3
+                                                    ? '#010101'
+                                                    : '#5447df';
 
                                     return (
-                                        <div className="stockCard" key={stock.id}>
+                                        <div
+                                            className="stockCard"
+                                            key={stock.id}
+                                            style={{ backgroundColor }}
+                                        >
                                             <div className="stockNameBox">
                                                 <div
                                                     className="stockLogo"
@@ -142,9 +154,8 @@ const Exchange = () => {
                                             />
                                             <div className="stockCurrentPrice">${stock.price}</div>
                                             <div
-                                                className={`exchangeBalanceStatus ${
-                                                    isPriceUp ? 'exchangeBackUp' : 'exchangeBackDown'
-                                                }`}
+                                                className={`exchangeBalanceStatus ${isPriceUp ? 'exchangeBackUp' : 'exchangeBackDown'
+                                                    }`}
                                             >
                                                 <div
                                                     className={isPriceUp ? 'exchangeLineStatusUp' : 'exchangeLineStatusDown'}
@@ -157,6 +168,53 @@ const Exchange = () => {
                                         </div>
                                     );
                                 })}
+                            </div>
+                        </div>
+                        <div className='exchangeBuyPlace'>
+                            <div className='buyingOrSale'>
+                                <div className='buySection'>
+                                    BUY
+                                </div>
+                                <div className='saleSection'>
+                                    SELL
+                                </div>
+                            </div>
+                            <div className='choosenStock'>
+                                <div className='choosenStockDisp'>
+                                    <div className="stockNameBox">
+                                        <div
+                                            className="stockLogo"
+                                            style={{
+                                                backgroundImage: `url(http://localhost:3000/images/googleStock.png)`,
+                                            }}
+                                        ></div>
+                                        <div className="stockNameText">
+                                            Google
+                                            <div className="ident">GGL</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        You send
+                                    </div>
+                                </div>
+                                <div className='numberOfStocks'>
+                                    <div>$</div>
+                                    <input type='text' placeholder='00.00'></input>
+                                </div>
+                            </div>
+                            <div className='howMuchMoneyYouGet'>
+                                <div className='numberOfStocks'>
+                                    <div>$</div>
+                                    <input type='text' placeholder='00.00'></input>
+                                </div>
+                                <div>
+                                    You get
+                                </div>
+                            </div>
+                            <div className='buttonFlexExchange'>
+                                <div className='exchangeButton'>
+                                    EXCHANGE
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -48,7 +48,7 @@ function MainPageShowLogic() {
                             SHOP
                         </div>
                     </div>
-                    <div className='work-card'>
+                    <div className='work-card' onClick={() => navigateTo('/exchange')}>
                         <div className='work-screen'>
                             05
                         </div>
@@ -61,7 +61,7 @@ function MainPageShowLogic() {
                             06
                         </div>
                         <div className='work-desc'>
-                            CURRENCY
+                            WEATHER APP
                         </div>
                     </div>
                 </div>
