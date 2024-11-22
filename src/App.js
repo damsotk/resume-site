@@ -27,11 +27,17 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login setToken={handleToken} />} />
 
-          <Route path='/exchange' element={<Exchange/>}/>
 
           <Route path="/" element={
             <MainPage />
           } />
+
+          <Route path='/exchange' element={
+            <ProtectedRoute token={token}>
+              <Exchange />
+            </ProtectedRoute>
+          } />
+
           <Route path="/movie-searcher" element={
             <ProtectedRoute token={token}>
               <MovieSearch />

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
+import axios from 'axios';
 import './exchange.css'
 import ExchangeModal from './exchangeModal/exchangeModal';
+import BuySellSection from './exchangeBuySellSection/exchangeBuySellSection';
 
 
 import {
@@ -29,12 +31,31 @@ const Exchange = () => {
 
     const [stocks, setStocks] = useState({});
     const [showModal, setShowModal] = useState(false);
+
+    const [balance, setBalance] = useState(0);
+
+    useEffect(() => {
+        const fetchBalance = async () => {
+          try {
+            const token = localStorage.getItem('token'); 
+            const response = await axios.get('http://localhost:3000/api/balance', {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            setBalance(response.data.balance);
+          } catch (error) {
+            console.error('Error fetching balance:', error);
+          }
+        };
+    
+        fetchBalance();
+      }, []);
+
     useEffect(() => {
         const socket = new WebSocket('ws://localhost:8080');
 
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data);
-
+        
             if (message.type === 'initial') {
                 const initialStocks = {};
                 message.stocks.forEach(stock => {
@@ -65,6 +86,7 @@ const Exchange = () => {
     };
 
     const stockList = Object.values(stocks);
+    
     const visibleStocks = stockList.slice(0, 4);
     const hiddenStocks = stockList.slice(4);
 
@@ -78,7 +100,7 @@ const Exchange = () => {
                         <div className="infoAboutStocks">
                             <div className="exchangeForMoneyInfo">
                                 <div className="exchangeMoneyText">TOTAL BALANCE</div>
-                                <div className="exchangeMainBalance">$100,00</div>
+                                <div className="exchangeMainBalance">${balance}</div>
                                 <div className="exchangeBalanceStatus exchangeBackUp">
                                     <div className="exchangeLineStatusUp"></div>
                                     <div className="exchangePercentBalance">+10%</div>
@@ -170,53 +192,7 @@ const Exchange = () => {
                                 })}
                             </div>
                         </div>
-                        <div className='exchangeBuyPlace'>
-                            <div className='buyingOrSale'>
-                                <div className='buySection'>
-                                    BUY
-                                </div>
-                                <div className='saleSection'>
-                                    SELL
-                                </div>
-                            </div>
-                            <div className='choosenStock'>
-                                <div className='choosenStockDisp'>
-                                    <div className="stockNameBox">
-                                        <div
-                                            className="stockLogo"
-                                            style={{
-                                                backgroundImage: `url(http://localhost:3000/images/googleStock.png)`,
-                                            }}
-                                        ></div>
-                                        <div className="stockNameText">
-                                            Google
-                                            <div className="ident">GGL</div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        You send
-                                    </div>
-                                </div>
-                                <div className='numberOfStocks'>
-                                    <div>$</div>
-                                    <input type='text' placeholder='00.00'></input>
-                                </div>
-                            </div>
-                            <div className='howMuchMoneyYouGet'>
-                                <div className='numberOfStocks'>
-                                    <div>$</div>
-                                    <input type='text' placeholder='00.00'></input>
-                                </div>
-                                <div>
-                                    You get
-                                </div>
-                            </div>
-                            <div className='buttonFlexExchange'>
-                                <div className='exchangeButton'>
-                                    EXCHANGE
-                                </div>
-                            </div>
-                        </div>
+                        <BuySellSection stockList={stockList} />
                     </div>
                 </div>
             </div>

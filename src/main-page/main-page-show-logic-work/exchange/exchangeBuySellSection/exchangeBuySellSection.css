@@ -1,0 +1,75 @@
+.exchangeBuyPlace {
+    background-color: #323232;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 20%;
+    border-radius: 20px;
+}
+
+.buyingOrSale {
+    display: flex;
+    gap: 20px;
+    color: #6a6a6a;
+    justify-content: start;
+
+}
+
+.buyContent, .sellContent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.choosenStock,
+.howMuchMoneyYouGet,
+.howMuchMoneyYouSend {
+    background-color: #262626;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.choosenStockDisp {
+    display: flex;
+    justify-content: space-between;
+}
+
+.numberOfStocks {
+    color: #6a6a6a;
+    margin-top: 15px;
+    font-family: "Electrolize", sans-serif;
+    font-size: 35px;
+    display: flex;
+    align-items: center;
+}
+
+.numberOfStocks input {
+    all: unset;
+    color: white;
+    width: 100%;
+}
+
+.howMuchMoneyYouGet, .howMuchMoneyYouSend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttonFlexExchange {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.exchangeButton {
+    width: 100%;
+    background-color: #000201;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+}
