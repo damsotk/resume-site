@@ -46,16 +46,19 @@
     position: relative;
 }
 
-.exchangeMoneyText {
-    position: absolute;
-    font-size: 20px;
+.exchangeContainerFlexUsernameAndBalance {
+    display: flex;
+    justify-content: space-between;
     font-family: "Electrolize", sans-serif;
     color: #6a6a6a;
 }
 
+.exchangeMoneyText {
+    font-size: 20px;
+}
+
 .exchangeMainBalance {
     font-size: 80px;
-    margin-top: 30px;
     font-family: "Electrolize", sans-serif;
     color: #f2f2f2;
 }
