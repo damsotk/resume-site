@@ -11,7 +11,7 @@ const BuySellSection = ({ stockList }) => {
 
     const handleExchange = async () => {
         if (!amountInDollars || !selectedStock.id) return alert("Please enter an amount and select a stock.");
-
+        
         const token = localStorage.getItem('token');
         try {
             const response = await fetch('http://localhost:3000/api/exchange', {
@@ -22,10 +22,12 @@ const BuySellSection = ({ stockList }) => {
                 },
                 body: JSON.stringify({
                     stockId: selectedStock.id,
-                    amountInDollars: parseFloat(amountInDollars)
+                    amountInDollars: parseFloat(amountInDollars),
+                    stockPrice: selectedStock.price,
+                    stockName: selectedStock.stockName 
                 })
             });
-
+        
             const data = await response.json();
             if (response.ok) {
                 alert(`Successfully purchased ${calculateShares()} shares of ${selectedStock.stockName}`);

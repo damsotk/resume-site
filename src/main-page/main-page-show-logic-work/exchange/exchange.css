@@ -8,17 +8,18 @@
 
 .exchangeFlex {
     display: flex;
+    flex-direction: column;
     background-color: #000;
-
 }
 
 .exchangeMenu {
     color: white;
-    width: 5%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
 }
 
 .exchangeDisplay {
-    width: 95%;
     color: white;
     display: flex;
     justify-content: center;
@@ -33,7 +34,7 @@
     display: flex;
     padding: 40px;
     gap: 20px;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
 }
 
 .infoAboutStocks {

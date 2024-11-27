@@ -37,23 +37,21 @@ const Exchange = () => {
 
     const [balance, setBalance] = useState(0);
     const [username, setUsername] = useState(`error`)
-    const [userBuyingStocks, setUserBuyingStocks] = useState([]);
+    const [userPortfolio, setUserPortfolio] = useState([]);
+
 
     useEffect(() => {
         const fetchBalance = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:3000/api/balance', {
+                const response = await axios.get('http://localhost:3000/api/allInfoAboutUserExchange', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
+                console.log(response);
+                
                 setBalance(response.data.balance);
                 setUsername(response.data.username);
-                setUserBuyingStocks(response.data.stocks);
-
-                console.log(response.data);
-                
-
-
+                setUserPortfolio(response.data.user_portfolio);
             } catch (error) {
                 console.error('Error fetching balance:', error);
             }
@@ -112,13 +110,14 @@ const Exchange = () => {
                     <button onClick={() => setShowHoldings(true)}>
                         View Portfolio
                     </button>
+                    <button onClick={() => setShowHoldings(false)}>Close</button>
                 </div>
 
                 {showHoldings ? (
                     <ExchangeHoldings
                         balance={balance}
                         username={username}
-                        userBuyingStocks={userBuyingStocks}
+                        userPortfolio={userPortfolio}
                         onClose={() => setShowHoldings(false)}
                     />
                 ) : (

@@ -23,6 +23,3 @@ yarn-debug.log*
 yarn-error.log*
 server/images
 src/all-images
-server/server.js
-server/companies.json
-server/server.js
