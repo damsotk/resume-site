@@ -7,6 +7,8 @@ const fs = require('fs');
 const path = require('path');
 const mysql = require('mysql2');
 
+
+
 const WebSocket = require('ws');
 
 const app = express();
@@ -14,15 +16,42 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const port = 3000;
+const dataPath = path.join(__dirname, 'data.json');
+
+let data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+app.get('/leap-to-riches/:id', (req, res) => {
+  console.log('GET request for player with id ${req.params.id}');
+  const player = data['leap-to-riches'].find(p => p.id === req.params.id);
+  if (player) {
+    res.json(player);
+  } else {
+    res.status(404).send('Player not found');
+  }
+});
+
+app.put('/leap-to-riches/:id', (req, res) => {
+  const playerId = req.params.id;
+  const playerIndex = data['leap-to-riches'].findIndex(p => p.id === playerId);
+  if (playerIndex !== -1) {
+    data['leap-to-riches'][playerIndex] = req.body;
+    fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
+    res.json(data['leap-to-riches'][playerIndex]);
+  } else {
+    res.status(404).send('Player not found');
+  }
+});
+
+
 
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'somethinglookslikePassword',
+  password: 'secret',
   database: 'db_for_resume_site',
 });
 
-const jwtSecret = 'pleasedontcrackme112';
+const jwtSecret = 'secret';
 
 db.connect(err => {
   if (err) {
@@ -45,8 +74,8 @@ app.post('/api/login', (req, res) => {
       if (!isMatch) return res.status(401).json({ message: 'Невірний логін або пароль' });
 
       const token = jwt.sign({ id: user.id }, jwtSecret, { expiresIn: '5h' });
-      
-      res.json({ token, username: user.username }); 
+     
+      res.json({ token, username: user.username });
     });
   });
 });
@@ -174,7 +203,7 @@ app.post('/api/conference', authenticateToken, (req, res) => {
   console.log(`прийшло`, targetUserId, userId);
 
 
-  
+
   db.query('SELECT id FROM users WHERE id = ?', [targetUserId], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -289,7 +318,7 @@ app.post('/api/messages', authenticateToken, (req, res) => {
   const { conferenceId, message } = req.body;
   const senderId = req.user.id;
 
-  
+ 
   db.query(
     'SELECT IF(user_1_id = ?, user_2_id, user_1_id) AS receiver_id FROM conferences WHERE id = ?',
     [senderId, conferenceId],
@@ -343,7 +372,7 @@ const broadcastUpdates = (data) => {
 const dbExchange = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'a18m27p20aA&&',
+  password: 'secret',
   database: 'stock_exchange_db',
 });
 
@@ -449,7 +478,7 @@ app.get('/api/stocks', (req, res) => {
 
 app.post('/api/exchange', authenticateToken, (req, res) => {
   const userId = req.user.id;
-  const { stockId, amountInDollars, stockPrice, stockName } = req.body;
+  const { stockId, amountInDollars, stockPrice, stockName } = req.body; 
 
   
   dbExchange.query('SELECT balance FROM exchange_users_balance WHERE user_id = ?', [userId], (err, results) => {
@@ -477,7 +506,7 @@ app.post('/api/exchange', authenticateToken, (req, res) => {
         (err) => {
           if (err) return res.status(500).json({ message: 'Failed to record purchase' });
 
-          
+         
           dbExchange.query(
             'INSERT INTO user_stocks (user_id, stock_id, stock_name, quantity) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE quantity = quantity + ?',
             [userId, stockId, stockName, quantity, quantity],
@@ -490,6 +519,62 @@ app.post('/api/exchange', authenticateToken, (req, res) => {
       );
     });
   });
+});
+
+app.post('/api/sell', authenticateToken, (req, res) => {
+  const userId = req.user.id;
+  const { stockId, stockName, sellQuantity, stockPrice } = req.body;
+
+  
+  dbExchange.query(
+    `
+      SELECT 
+        SUM(CASE WHEN transaction_type = 'buy' THEN quantity ELSE 0 END) -
+        SUM(CASE WHEN transaction_type = 'sell' THEN quantity ELSE 0 END) AS availableQuantity
+      FROM user_transactions
+      WHERE user_id = ? AND stock_id = ?
+    `,
+    [userId, stockId],
+    (err, results) => {
+      if (err || results.length === 0) {
+        return res.status(500).json({ message: 'Error calculating available quantity' });
+      }
+
+      const availableQuantity = parseFloat(results[0].availableQuantity) || 0;
+
+      
+      if (sellQuantity > availableQuantity) {
+        return res.status(400).json({ message: 'Not enough shares to sell' });
+      }
+
+     
+      const sellValue = (sellQuantity * stockPrice).toFixed(2);
+
+      
+      dbExchange.query(
+        'INSERT INTO user_transactions (user_id, stock_id, stock_name, quantity, purchase_price, transaction_type) VALUES (?, ?, ?, ?, ?, ?)',
+        [userId, stockId, stockName, sellQuantity, stockPrice, 'sell'],
+        (err) => {
+          if (err) {
+            return res.status(500).json({ message: 'Failed to record sale transaction' });
+          }
+
+          
+          dbExchange.query(
+            'UPDATE exchange_users_balance SET balance = balance + ? WHERE user_id = ?',
+            [sellValue, userId],
+            (err) => {
+              if (err) {
+                return res.status(500).json({ message: 'Failed to update user balance' });
+              }
+
+              res.json({ message: 'Sale successful', sellValue });
+            }
+          );
+        }
+      );
+    }
+  );
 });
 
 
@@ -531,9 +616,8 @@ app.get('/api/allInfoAboutUserExchange', authenticateToken, async (req, res) => 
        WHERE user_id = ?`, [userId]
     );
 
-    if (transactionResults.length === 0) {
-      return res.status(404).json({ message: 'No transactions found for user' });
-    }
+    
+    const portfolio = {};
 
     
     const [userResults] = await db.promise().query(
@@ -548,34 +632,34 @@ app.get('/api/allInfoAboutUserExchange', authenticateToken, async (req, res) => 
     const stockPrices = await getCurrentStockPrices();
 
     
-    const portfolio = {};
+    if (transactionResults.length > 0) {
+      transactionResults.forEach(transaction => {
+        const { stock_id, stock_name, quantity, transaction_type, purchase_price } = transaction;
+        const parsedQuantity = parseFloat(quantity);
 
-    transactionResults.forEach(transaction => {
-      const { stock_name, quantity, transaction_type, purchase_price } = transaction;
-      const parsedQuantity = parseFloat(quantity);
-      
-      
-      if (transaction_type === 'buy') {
-        if (!portfolio[stock_name]) {
-          portfolio[stock_name] = { quantity: 0, totalInvestment: 0 };
+        
+        if (transaction_type === 'buy') {
+          if (!portfolio[stock_id]) {
+            portfolio[stock_id] = { stockName: stock_name, quantity: 0, totalInvestment: 0 };
+          }
+          portfolio[stock_id].quantity += parsedQuantity;
+          portfolio[stock_id].totalInvestment += parsedQuantity * parseFloat(purchase_price);
+        } 
+        
+        else if (transaction_type === 'sell') {
+          if (!portfolio[stock_id]) {
+            portfolio[stock_id] = { stockName: stock_name, quantity: 0, totalInvestment: 0 };
+          }
+          portfolio[stock_id].quantity -= parsedQuantity;
+          portfolio[stock_id].totalInvestment -= parsedQuantity * parseFloat(purchase_price);
         }
-        portfolio[stock_name].quantity += parsedQuantity;
-        portfolio[stock_name].totalInvestment += parsedQuantity * parseFloat(purchase_price);
-      } 
-      
-      else if (transaction_type === 'sell') {
-        if (!portfolio[stock_name]) {
-          portfolio[stock_name] = { quantity: 0, totalInvestment: 0 };
-        }
-        portfolio[stock_name].quantity -= parsedQuantity;
-        portfolio[stock_name].totalInvestment -= parsedQuantity * parseFloat(purchase_price);
-      }
-    });
+      });
+    }
 
     
-    const userPortfolio = Object.keys(portfolio).map(stockName => {
-      const stockInfo = portfolio[stockName];
-      const { price, logo } = stockPrices[stockName] || { price: 0, logo: null };
+    const userPortfolio = Object.keys(portfolio).map(stockId => {
+      const stockInfo = portfolio[stockId];
+      const { price, logo } = stockPrices[stockInfo.stockName] || { price: 0, logo: null };
 
       
       const totalCurrentValue = stockInfo.quantity * price;
@@ -584,17 +668,17 @@ app.get('/api/allInfoAboutUserExchange', authenticateToken, async (req, res) => 
         : 0;
 
       return {
-        stockName: stockName,
+        stockId: parseInt(stockId),
+        stockName: stockInfo.stockName,
         quantity: stockInfo.quantity,
-        totalInvestment: stockInfo.totalInvestment,
+        totalInvestment: parseFloat(stockInfo.totalInvestment.toFixed(2)),
         currentPrice: price,
-        totalCurrentValue: totalCurrentValue,
+        totalCurrentValue: parseFloat(totalCurrentValue.toFixed(2)),
         stockLogo: logo,
-        percentChange: percentChange.toFixed(2) 
+        percentChange: percentChange.toFixed(2)
       };
     });
 
-    
     const responseData = {
       username: userResults[0].username,
       balance: userBalance,
@@ -609,6 +693,21 @@ app.get('/api/allInfoAboutUserExchange', authenticateToken, async (req, res) => 
   }
 });
 
+app.get('/api/get_user_transactions', authenticateToken, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const userTransactionsSQL = 'SELECT * FROM user_transactions WHERE user_id = ?';
+    dbExchange.query(userTransactionsSQL, [userId], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: 'Database query error' });
+      }
+      res.json(results);
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 process.on('SIGINT', () => {

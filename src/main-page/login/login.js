@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './login.css';
 
 const Login = ({ setToken }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,7 +23,8 @@ const Login = ({ setToken }) => {
             const data = await response.json();
             if (response.ok) {
                 setToken(data.token);
-                setError(''); // очищаємо попередні помилки
+                setError('');
+                navigate('/');  // Перенаправлення на головну сторінку
             } else {
                 setError(data.message || 'Не вдалося увійти. Перевірте ваші дані.');
             }
@@ -59,7 +63,9 @@ const Login = ({ setToken }) => {
                     <button className='buttonForLogin' type="submit">LOGIN</button>
                 </form>
                 {error && <div className='error-message'>{error}</div>}
-                <div className='textWhereAccount'>The website does not have the option to create an account. If you have somehow arrived here, it means the website owner must have given you a username and password for the account! Have fun!</div>
+                <div className='textWhereAccount'>
+                    The website does not have the option to create an account. If you have somehow arrived here, it means the website owner must have given you a username and password for the account! Have fun!
+                </div>
             </div>
         </div>
     );

@@ -4,6 +4,8 @@ import './product-details.css'
 import './product-details-animation.css'
 import ShopFooter from '../shop-footer/shop-footer';
 import useBallsAnimation from '../../../hooks/useBallsAnimation';
+import ShopHeader from '../shop-header/shop-header';
+import { useLocation } from 'react-router-dom';
 
 function ProductDetails() {
   const balls = useBallsAnimation();
@@ -18,6 +20,11 @@ function ProductDetails() {
   const [otherProducts, setOtherProducts] = useState([]);
   const [visibleProducts, setVisibleProducts] = useState(4);
 
+  const [importNameForHeader, setimportNameForHeader] = useState("")
+
+  const location = useLocation();
+  const pageClass = location.pathname.replace(/\//g, '-');
+
   const handleClick = (productId) => {
     console.log(productId)
     setAddedProducts(prevState => ({
@@ -29,7 +36,7 @@ function ProductDetails() {
   useEffect(() => {
     fetch(`http://localhost:3000/api/products/${id}`)
       .then(response => response.json())
-      .then(data => setProduct(data))
+      .then(data => {setimportNameForHeader(data.name); setProduct(data);})
       .catch(error => console.error('Error fetching product details:', error));
   }, [id]);
 
@@ -105,22 +112,10 @@ function ProductDetails() {
   return (
     <div className='backgroundShop'>
       <div className='containerForBalls'></div>
-      <div style={{ position: 'sticky', top: '10px', zIndex: '11', marginBottom: '20px' }}>
-        <div className="headerShop">
-          <div className="buttonBack">
-            BACK
-          </div>
-          <div className='shopAllCost'>$0.00</div>
-          <div className='productSocialHeader'>
-            <img src={`http://localhost:3000/images/instagram.png`} alt="instagram" />
-            <img src={`http://localhost:3000/images/facebook.png`} alt="facebook" />
-            <img src={`http://localhost:3000/images/twitter.png`} alt="twitter" />
-            <img src={`http://localhost:3000/images/youtube.png`} alt="youtube" />
-          </div>
-        </div>
-      </div>
+      <ShopHeader importNameForHeader={importNameForHeader} />
+
       <div className='productDetailsFlex'>
-        <div className='productShopName' style={{ backgroundImage: `url("http://localhost:3000/images/texture_black.jpg")` }}>
+        <div className={`productShopName letters${pageClass}`} style={{ backgroundImage: `url("http://localhost:3000/images/texture_black.jpg")` }}>
           <div
             className='imageProductShop'
             style={{
@@ -140,48 +135,10 @@ function ProductDetails() {
             return null;
           })}
         </div>
-        {/* <div className='productDetails'>
-          <div className='productDetailsName'>{product.name}</div>
-          <div className='productPrice'>${product.price}</div>
-          <div className='productBeat'></div>
-          <div className='productBeatTwo'></div>
-          <div className='productColorChooses'>
-            {product.colors.map((color, index) => (
-              <div key={index} className='productColorChoose' style={{ backgroundColor: color }}></div>
-            ))}
-          </div>
-          <div className='productSizeChooses'>
-            {Object.entries(product.size).map(([key, value]) => (
-              <div className='productSizeChooses'>
-                <div key={key} className='productSizeChoose'>
-                  {value}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className='productDetailContainer'>
-            <div className='flexForButtons'>
-              <div className='productQuantityContainer'>
-                <div className='productHowMuch' onClick={decreaseQuantity}>-</div>
-                <div className='productQuantity'>{quantity}</div>
-                <div className='productHowMuch2' onClick={increaseQuantity}>+</div>
-              </div>
-              <div className='productDetailBuy' style={{ width: "100%" }}>
-                ADD TO WISHLIST
-              </div>
-            </div>
-            <div className='productDetailBuy' style={{ width: "100%" }}>
-              BUY NOW
-            </div>
-          </div>
-        </div> */}
       </div>
       <div className='buyOrDie'>
         <div className='productBuyNowButton'>
           BUY NOW
-        </div>
-        <div className='productAddToCartButton'>
-          ADD TO CART
         </div>
       </div>
       <div className='productDetailsNav'>

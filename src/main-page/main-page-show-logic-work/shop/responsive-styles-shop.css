@@ -1,0 +1,219 @@
+ /* Extra small devices (до 576px) */
+ @media (max-width: 575.98px) {
+
+     /* main page */
+     .headerShop .logo {
+         display: none;
+     }
+
+     .headerShop {
+         display: flex;
+         align-items: center;
+         color: #c0c0c0;
+         border: none;
+     }
+
+     .shopSearch input {
+         width: 100%;
+     }
+
+     .shopSearch {
+         margin-right: 10px;
+     }
+
+     /* product details */
+     .headerShopProductDetails .productSocialHeader {
+         display: none;
+     }
+
+     .headerShopProductDetails {
+         display: flex;
+         justify-content: center;
+     }
+
+     .nameForSelectProduct {
+         margin-left: 0px;
+     }
+
+     .headerShopProductDetails .buttonBack {
+         position: absolute;
+         left: 20px;
+         bottom: 10px;
+     }
+
+     .productNameOne,
+     .productNameTwo,
+     .productNameThree {
+         position: inherit !important;
+         bottom: 0 !important;
+         left: 0 !important;
+         right: 0 !important;
+         top: 0 !important;
+         z-index: 100 !important;
+         font-size: 50px !important;
+     }
+
+     .productShopName {
+         display: flex;
+         justify-content: center;
+         align-items: end;
+         gap: 10px;
+     }
+
+     .productDesc {
+        display: flex;
+        font-family: 'Bebas Neue', sans-serif;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .textForOtherProductBig {
+        font-size: 110px !important;
+    }
+
+    .textForOtherProductSmall {
+        font-size: 60px !important;
+    }
+ }
+
+ /* Small devices (576px до 768px) */
+ @media (min-width: 576px) and (max-width: 767.98px) {
+
+     /* main page */
+     .headerShop .logo {
+         display: none;
+     }
+
+     .headerShop {
+         display: flex;
+         align-items: center;
+         color: #c0c0c0;
+         border: none;
+     }
+
+     .shopSearch input {
+         width: 100%;
+     }
+
+     .shopSearch {
+         margin-right: 10px;
+     }
+
+     /* product details */
+     .headerShopProductDetails .productSocialHeader {
+         display: none;
+     }
+
+     .headerShopProductDetails {
+         display: flex;
+         justify-content: center;
+     }
+
+     .nameForSelectProduct {
+         margin-left: 0px;
+     }
+
+     .headerShopProductDetails .buttonBack {
+         position: absolute;
+         left: 20px;
+         bottom: 10px;
+     }
+
+     .productNameOne,
+     .productNameTwo,
+     .productNameThree {
+         position: inherit !important;
+         bottom: 0 !important;
+         left: 0 !important;
+         right: 0 !important;
+         top: 0 !important;
+         z-index: 100 !important;
+         font-size: 50px !important;
+     }
+
+     .productShopName {
+         display: flex;
+         justify-content: center;
+         align-items: end;
+         gap: 10px;
+     }
+
+     .productDesc {
+        display: flex;
+        font-family: 'Bebas Neue', sans-serif;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .textForOtherProductBig {
+        font-size: 110px !important;
+    }
+
+    .textForOtherProductSmall {
+        font-size: 60px !important;
+    }
+
+ }
+
+ /* Medium devices (768px до 992px) */
+ @media (min-width: 768px) and (max-width: 991.98px) {
+
+     .productNameOne,
+     .productNameTwo,
+     .productNameThree {
+         position: inherit !important;
+         bottom: 0 !important;
+         left: 0 !important;
+         right: 0 !important;
+         top: 0 !important;
+         z-index: 100 !important;
+         font-size: 50px !important;
+     }
+
+     .productShopName {
+         display: flex;
+         justify-content: center;
+         align-items: end;
+         gap: 10px;
+     }
+
+     .productDesc {
+        display: flex;
+        font-family: 'Bebas Neue', sans-serif;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+    }
+ }
+
+ /* Large devices (992px до 1200px) */
+ @media (min-width: 992px) and (max-width: 1199.98px) {
+    .productDesc {
+        display: flex;
+        font-family: 'Bebas Neue', sans-serif;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+    }
+ }
+
+ /* Extra large devices (1200px до 1400px) */
+ @media (min-width: 1200px) and (max-width: 1399.98px) {
+    .productDesc {
+        display: flex;
+        font-family: 'Bebas Neue', sans-serif;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+    }
+ }
+
+ /* Extra extra large devices (1400px і більше) */
+ @media (min-width: 1400px) {}

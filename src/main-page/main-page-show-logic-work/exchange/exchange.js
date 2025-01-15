@@ -4,7 +4,8 @@ import axios from 'axios';
 import './exchange.css'
 import ExchangeModal from './exchangeModal/exchangeModal';
 import BuySellSection from './exchangeBuySellSection/exchangeBuySellSection';
-import ExchangeHoldings from './exchangeHoldings/exchangeHoldings'
+import { useNavigate } from 'react-router-dom';
+import ExchangeMenu from './exchangeMenu/exchangeMenu';
 
 
 import {
@@ -32,12 +33,11 @@ const Exchange = () => {
 
     const [stocks, setStocks] = useState({});
     const [showModal, setShowModal] = useState(false);
-    const [showHoldings, setShowHoldings] = useState(false);
 
 
     const [balance, setBalance] = useState(0);
     const [username, setUsername] = useState(`error`)
-    const [userPortfolio, setUserPortfolio] = useState([]);
+
 
 
     useEffect(() => {
@@ -47,11 +47,9 @@ const Exchange = () => {
                 const response = await axios.get('http://localhost:3000/api/allInfoAboutUserExchange', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                console.log(response);
-                
+
                 setBalance(response.data.balance);
                 setUsername(response.data.username);
-                setUserPortfolio(response.data.user_portfolio);
             } catch (error) {
                 console.error('Error fetching balance:', error);
             }
@@ -106,125 +104,106 @@ const Exchange = () => {
     return (
         <div className="exchangeBackground">
             <div className="exchangeFlex">
-                <div className="exchangeMenu">
-                    <button onClick={() => setShowHoldings(true)}>
-                        View Portfolio
-                    </button>
-                    <button onClick={() => setShowHoldings(false)}>Close</button>
-                </div>
-
-                {showHoldings ? (
-                    <ExchangeHoldings
-                        balance={balance}
-                        username={username}
-                        userPortfolio={userPortfolio}
-                        onClose={() => setShowHoldings(false)}
-                    />
-                ) : (
-                    <div className="exchangeDisplay">
-                        <div className="exchangeForMainInfo">
-                            <div className="infoAboutStocks">
-                                <div className="exchangeForMoneyInfo">
-                                    <div className='exchangeContainerFlexUsernameAndBalance'>
-                                        <div className="exchangeMoneyText">TOTAL BALANCE</div>
-                                        <div className='exchangeUsernameDisplay'>Hello, {username}</div>
-                                    </div>
-                                    <div className="exchangeMainBalance">${balance}</div>
-                                    <div className="exchangeBalanceStatus exchangeBackUp">
-                                        <div className="exchangeLineStatusUp"></div>
-                                        <div className="exchangePercentBalance">+10%</div>
-                                    </div>
+                <ExchangeMenu />
+                <div className="exchangeDisplay">
+                    <div className="exchangeForMainInfo">
+                        <div className="infoAboutStocks">
+                            <div className="exchangeForMoneyInfo">
+                                <div className='exchangeContainerFlexUsernameAndBalance'>
+                                    <div className="exchangeMoneyText">TOTAL BALANCE</div>
+                                    <div className='exchangeUsernameDisplay'>Hello, {username}</div>
                                 </div>
-                                <div className="exchangeInfoBlock">
-                                    <div className="exchangeStocksInfo">
-                                        <div className="exchangeTextF">Best stocks</div>
-                                        <div className="exchangeButtonSee" onClick={handleShowModal}>
-                                            See all
-                                        </div>
+                                <div className="exchangeMainBalance">${balance}</div>
+                            </div>
+                            <div className="exchangeInfoBlock">
+                                <div className="exchangeStocksInfo">
+                                    <div className="exchangeTextF">Best stocks</div>
+                                    <div className="exchangeButtonSee" onClick={handleShowModal}>
+                                        See all
                                     </div>
-                                </div>
-                                <div className="exchangeBestStocks">
-                                    {visibleStocks.map((stock, index) => {
-                                        const isPriceUp = stock.percentageChange > 0;
-                                        const backgroundColor =
-                                            index === 1
-                                                ? '#e4ae5f'
-                                                : index === 2
-                                                    ? '#e1815e'
-                                                    : index === 3
-                                                        ? '#010101'
-                                                        : '#5447df';
-
-                                        return (
-                                            <div
-                                                className="stockCard"
-                                                key={stock.id}
-                                                style={{ backgroundColor }}
-                                            >
-                                                <div className="stockNameBox">
-                                                    <div
-                                                        className="stockLogo"
-                                                        style={{
-                                                            backgroundImage: `url(http://localhost:3000${stock.stockLogo})`,
-                                                        }}
-                                                    ></div>
-                                                    <div className="stockNameText">
-                                                        {stock.stockName}
-                                                        <div className="ident">GGL</div>
-                                                    </div>
-                                                </div>
-                                                <Line
-                                                    data={{
-                                                        labels: ['w', 'w', 'w', 'w', 'w', 'w', 'w'],
-                                                        datasets: [
-                                                            {
-                                                                label: ``,
-                                                                data: stock.priceHistory,
-                                                                borderColor: 'white',
-                                                                backgroundColor: 'white',
-                                                                fill: true,
-                                                                tension: 0.5,
-                                                            },
-                                                        ],
-                                                    }}
-                                                    options={{
-                                                        scales: {
-                                                            x: {
-                                                                ticks: { display: false },
-                                                                grid: { display: false },
-                                                                border: { display: false },
-                                                            },
-                                                            y: {
-                                                                ticks: { display: false },
-                                                                grid: { display: false },
-                                                                border: { display: false },
-                                                            },
-                                                        },
-                                                        plugins: { legend: { display: false } },
-                                                    }}
-                                                />
-                                                <div className="stockCurrentPrice">${stock.price}</div>
-                                                <div
-                                                    className={`exchangeBalanceStatus ${isPriceUp ? 'exchangeBackUp' : 'exchangeBackDown'
-                                                        }`}
-                                                >
-                                                    <div
-                                                        className={isPriceUp ? 'exchangeLineStatusUp' : 'exchangeLineStatusDown'}
-                                                    ></div>
-                                                    <div className="exchangePercentBalance">
-                                                        {isPriceUp ? '+' : ''}
-                                                        {stock.percentageChange}%
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
                                 </div>
                             </div>
-                            <BuySellSection stockList={stockList} />
+                            <div className="exchangeBestStocks">
+                                {visibleStocks.map((stock, index) => {
+                                    const isPriceUp = stock.percentageChange > 0;
+                                    const backgroundColor =
+                                        index === 1
+                                            ? '#e4ae5f'
+                                            : index === 2
+                                                ? '#e1815e'
+                                                : index === 3
+                                                    ? '#010101'
+                                                    : '#5447df';
+
+                                    return (
+                                        <div
+                                            className="stockCard"
+                                            key={stock.id}
+                                            style={{ backgroundColor }}
+                                        >
+                                            <div className="stockNameBox">
+                                                <div
+                                                    className="stockLogo"
+                                                    style={{
+                                                        backgroundImage: `url(http://localhost:3000${stock.stockLogo})`,
+                                                    }}
+                                                ></div>
+                                                <div className="stockNameText">
+                                                    {stock.stockName}
+                                                    <div className="ident">GGL</div>
+                                                </div>
+                                            </div>
+                                            <Line
+                                                data={{
+                                                    labels: ['w', 'w', 'w', 'w', 'w', 'w', 'w'],
+                                                    datasets: [
+                                                        {
+                                                            label: ``,
+                                                            data: stock.priceHistory,
+                                                            borderColor: 'white',
+                                                            backgroundColor: 'white',
+                                                            fill: true,
+                                                            tension: 0.5,
+                                                        },
+                                                    ],
+                                                }}
+                                                options={{
+                                                    scales: {
+                                                        x: {
+                                                            ticks: { display: false },
+                                                            grid: { display: false },
+                                                            border: { display: false },
+                                                        },
+                                                        y: {
+                                                            ticks: { display: false },
+                                                            grid: { display: false },
+                                                            border: { display: false },
+                                                        },
+                                                    },
+                                                    plugins: { legend: { display: false } },
+                                                }}
+                                            />
+                                            <div className="stockCurrentPrice">${stock.price}</div>
+                                            <div
+                                                className={`exchangeBalanceStatus ${isPriceUp ? 'exchangeBackUp' : 'exchangeBackDown'
+                                                    }`}
+                                            >
+                                                <div
+                                                    className={isPriceUp ? 'exchangeLineStatusUp' : 'exchangeLineStatusDown'}
+                                                ></div>
+                                                <div className="exchangePercentBalance">
+                                                    {isPriceUp ? '+' : ''}
+                                                    {stock.percentageChange}%
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
+                        <BuySellSection stockList={stockList} />
                     </div>
-                )}
+                </div>
             </div>
             {showModal && (
                 <ExchangeModal onClose={handleCloseModal}>

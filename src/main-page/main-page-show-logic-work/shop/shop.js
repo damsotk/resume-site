@@ -4,6 +4,7 @@ import ShopHeader from './shop-header/shop-header';
 import ShopFooter from './shop-footer/shop-footer';
 import './shop.css';
 import './shop-animation.css';
+import './responsive-styles-shop.css';
 
 function Shop() {
   const [products, setProducts] = useState([]);
@@ -64,7 +65,6 @@ function Shop() {
   };
 
   const handleClick = (product) => {
-    console.log("успішний клік");
     const productId = product.id;
     const productPrice = parseFloat(product.price);
     const isAdded = !addedProducts[productId];
@@ -72,7 +72,6 @@ function Shop() {
     const newTotalCost = isAdded ? totalCost + productPrice : totalCost - productPrice;
   
     if (isAdded) {
-      console.log(`зберігаю`);
       saveProductToCart(productId); 
     } else {
       removeProductFromCart(productId); 
@@ -120,7 +119,7 @@ function Shop() {
 
   return (
     <div className='mainPageShowLogicShop'>
-      <ShopHeader onSearch={handleSearch} />
+      <ShopHeader onSearch={handleSearch} totalCost={totalCost}  />
       <div className='containerForBalls'></div>
       <div className="background">
         {filteredProducts.length > 0 ? (
@@ -151,7 +150,6 @@ function Shop() {
         )}
       </div>
       <ShopFooter />
-      <div className='shopAllCost'>${totalCost.toFixed(2)}</div>
     </div>
   );
 }

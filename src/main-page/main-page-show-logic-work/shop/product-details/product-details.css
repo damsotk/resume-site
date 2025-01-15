@@ -84,8 +84,9 @@
     background-size: cover;
     background-position: center;
     border-radius: 50%;
-    width: 570px;
-    height: 570px;
+    width: 100%;
+    max-width: 570px;
+    aspect-ratio: 1 / 1;
     z-index: 10;
 }
 
@@ -93,8 +94,9 @@
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 20px;
-    width: 570px;
-    height: 570px;
+    width: 100%;
+    max-width: 570px;
+    aspect-ratio: 1 / 1;
     position: absolute;
     transition: 0.1s all;
     z-index: 1;
@@ -103,7 +105,7 @@
 .productNameOne,
 .productNameTwo {
     position: absolute;
-    font-size: 150px;
+    font-size: 10vw; /* Респонсивний розмір */
 }
 
 .productNameOne {
@@ -117,6 +119,241 @@
     bottom: 150px;
 }
 
+.productNameThree {
+    position: absolute;
+    font-size: 5vw; /* Респонсивний розмір */
+    bottom: -20px;
+    right: 50px;
+}
+
+.letters-shop-products-2 .productNameOne {
+    left: -150px;
+}
+.letters-shop-products-2 .productNameTwo {
+    right: -50px;
+}
+.letters-shop-products-2 .productNameThree {
+    right: 40px;
+    bottom: 100px;
+}
+
+.letters-shop-products-4 .productNameOne {
+    left: -150px;
+}
+.letters-shop-products-4 .productNameTwo {
+    right: -250px;
+}
+
+.letters-shop-products-5 .productNameOne {
+    left: -200px;
+}
+.letters-shop-products-5 .productNameTwo {
+    right: -190px;
+}
+.letters-shop-products-5 .productNameThree {
+    right: -190px;
+    bottom: 120px;
+}
+
+.letters-shop-products-6 .productNameOne {
+    left: -250px;
+}
+.letters-shop-products-6 .productNameTwo {
+    right: -90px;
+}
+.letters-shop-products-6 .productNameThree {
+    right: -80px;
+    bottom: 120px;
+}
+
+.letters-shop-products-7 .productNameOne {
+    left: -130px;
+}
+.letters-shop-products-7 .productNameTwo {
+    right: -250px;
+}
+.letters-shop-products-7 .productNameThree {
+    right: -180px;
+    bottom: 120px;
+}
+
+.letters-shop-products-8 .productNameOne {
+    left: -130px;
+}
+.letters-shop-products-8 .productNameTwo {
+    right: -130px;
+}
+.letters-shop-products-8 .productNameThree {
+    right: -200px;
+    bottom: 120px;
+}
+
+.letters-shop-products-9 .productNameTwo {
+    right: -190px;
+}
+
+.letters-shop-products-10 .productNameOne {
+    left: 120px;
+    top: 220px;
+}
+.letters-shop-products-10 .productNameTwo {
+    right: 130px;
+}
+.letters-shop-products-10 .productNameThree {
+    right: 200px;
+    bottom: 120px;
+}
+
+.letters-shop-products-11 .productNameOne {
+    left: -130px;
+}
+
+.letters-shop-products-11 .productNameThree {
+    right: -200px;
+    bottom: 120px;
+}
+
+.letters-shop-products-12 .productNameOne {
+    left: -130px;
+}
+.letters-shop-products-12 .productNameTwo {
+    right: -130px;
+}
+.letters-shop-products-12 .productNameThree {
+    right: -200px;
+    bottom: 120px;
+}
+
+.letters-shop-products-13 .productNameOne {
+    left: 50px;
+}
+.letters-shop-products-13 .productNameTwo {
+    right: -70px;
+}
+.letters-shop-products-13 .productNameThree {
+    right: -170px;
+    bottom: 120px;
+}
+
+.letters-shop-products-14 .productNameOne {
+    left: 50px;
+    top: 10px;
+}
+.letters-shop-products-14 .productNameTwo {
+    top: 10px;
+    right: 70px;
+}
+.letters-shop-products-14 .productNameThree {
+    right: -170px;
+    top: 150px;
+    bottom: 120px;
+}
+
+.letters-shop-products-15 .productNameOne {
+    left: -110px;
+}
+.letters-shop-products-15 .productNameTwo {
+    right: -190px;
+    bottom: 110px;
+}
+.letters-shop-products-15 .productNameThree {
+    bottom: -10px;
+}
+
+.letters-shop-products-16 .productNameOne {
+    top: 10px;
+    left: 0;
+}
+.letters-shop-products-16 .productNameTwo {
+    bottom: -10px;
+}
+
+.letters-shop-products-17 .productNameOne {
+    left: -110px;
+}
+.letters-shop-products-17 .productNameTwo {
+    right: -190px;
+    bottom: 110px;
+    z-index: 1000;
+}
+.letters-shop-products-17 .productNameThree {
+    bottom: -10px;
+}
+
+.letters-shop-products-19 .productNameOne {
+    top: 10px;
+    left: 0;
+}
+.letters-shop-products-19 .productNameTwo {
+    bottom: -10px;
+}
+
+.letters-shop-products-22 .productNameOne {
+    left: -220px;
+}
+.letters-shop-products-22 .productNameTwo {
+    right: -150px;
+    bottom: 110px;
+}
+.letters-shop-products-22 .productNameThree {
+    bottom: -10px;
+}
+
+.letters-shop-products-23 .productNameOne {
+    left: -190px;
+}
+.letters-shop-products-23 .productNameTwo {
+    right: -170px;
+    bottom: 110px;
+}
+.letters-shop-products-23 .productNameThree {
+    bottom: -10px;
+}
+
+.letters-shop-products-24 .productNameOne {
+    left: -170px;
+}
+.letters-shop-products-24 .productNameTwo {
+    right: -250px;
+    bottom: 110px;
+}
+.letters-shop-products-24 .productNameThree {
+    bottom: -10px;
+}
+
+.letters-shop-products-26 .productNameOne {
+    left: 100px;
+    top: 10px;
+}
+.letters-shop-products-26 .productNameTwo {
+    right: 230px;
+    top: 10px;
+}
+.letters-shop-products-26 .productNameThree {
+    bottom: 50px;
+}
+
+.letters-shop-products-29 .productNameOne {
+    left: -110px;
+}
+.letters-shop-products-29 .productNameTwo {
+    right: -110px;
+}
+.letters-shop-products-29 .productNameThree {
+    bottom: 110px;
+    right: -30px;
+}
+
+.letters-shop-products-30 .productNameOne {
+    left: -110px;
+}
+.letters-shop-products-30 .productNameTwo {
+    right: -110px;
+}
+.letters-shop-products-30 .productNameThree {
+    bottom: 110px;
+    right: -30px;
+}
 
 .productDetails {
     overflow: visible;
@@ -464,7 +701,6 @@
     font-family: 'Bebas Neue', sans-serif;
     color: white;
     opacity: 0.8;
-    top: 60px;
 }
 
 .otherProducts .shopAllProducts {

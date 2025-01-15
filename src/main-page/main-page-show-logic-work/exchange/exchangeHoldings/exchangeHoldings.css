@@ -1,3 +1,30 @@
 .infoAboutStocks {
     width: auto;
 }
+
+.userAllMoneyInExchange {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.totalInvestmentBalance {
+    font-size: 80px;
+    font-family: "Electrolize", sans-serif;
+    color: #f2f2f2;
+}
+
+.infoAboutUserStocks {
+    width: 100%;
+}
+
+.totalInvestmentBalanceFlex {
+    display: flex;
+    position: relative;
+}
+
+.percHoldings {
+    position: absolute;
+    right: 0px;
+    bottom: -20px;
+}

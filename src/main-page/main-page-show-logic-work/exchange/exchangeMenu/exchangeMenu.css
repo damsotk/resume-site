@@ -1,0 +1,22 @@
+.exchangeMenu {
+    color: white;
+    display: flex;
+    justify-content: start;
+    margin-top: 30px;
+    margin-left: 30px;
+    gap: 10px;
+}
+
+.exchangeMenuButton {
+    background-color: #1f1f1f;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.exchangeMenuButton:hover {
+    background-color: #3b3b3b;
+}
+
+.exchangeMenuButtonactive {
+    background-color: #3b3b3b;
+}
