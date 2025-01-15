@@ -1,9 +1,4 @@
-.container {
-    position: relative;
-    width: 100%;    
-    height: 100vh;
-    background-color: #000;
-}
+
 
 .just-flex-yo{
     display: flex;
@@ -37,16 +32,11 @@
     height: 80%;
     width: 100%;
     text-align: center;
-    font-size: 4vw;
+    font-size: 55px;
     border-bottom: 1px solid #C0C0C0;
 }
 
 .work-desc {
-    font-size: 2vw;
+    font-size: 30px;
     margin-top: 10px;
-}
-
-.work-card:hover {
-    cursor: pointer;
-    width: 28vw;
 }

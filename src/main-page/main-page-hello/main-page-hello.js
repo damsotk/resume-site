@@ -34,7 +34,7 @@ const MainPageHello = () => {
 
     return (
         <header>
-            <div className="container">
+            <div className="container" style={{ marginTop: 0 }}>
                 <div className="header">
                     <div className="logo">
                         damsot

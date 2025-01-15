@@ -7,6 +7,10 @@
     pointer-events: none;
 }
 
+.fatherForMain {
+    background-color: #000;
+}
+
 .containerForBalls {
     display: relative;
     position: sticky;

@@ -4,12 +4,13 @@ import MainPageSkills from './main-page-skills/main-page-skills';
 import MainPageShowLogic from './main-page-show-logic-work/main-page-show-logic-work';
 import useBallsAnimation from './hooks/useBallsAnimation';
 import './main-page.css';
+import './responsive-styles-main-page.css';
 
 const MainPage = () => {
     const balls = useBallsAnimation();
     return (
 
-        <header>
+        <header className='fatherForMain'>
             <div className='containerForBalls'></div>
             <MainPageHello />
             <MainPageSkills />

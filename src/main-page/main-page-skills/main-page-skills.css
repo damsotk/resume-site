@@ -1,9 +1,4 @@
-.container {
-    position: relative;
-    width: 100%;    
-    height: 100vh;
-    background-color: #000;
-}
+
 
 .just-flex-yo{
     display: flex;
@@ -17,6 +12,7 @@
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+    gap: 20px; /* додано для кращого відступу між картами */
 }
 
 .card {
@@ -30,8 +26,8 @@
     font-family: 'Bebas Neue', sans-serif;
     margin-bottom: 20px;
     height: 5vw;
-    width: 25vw;
-    transition: width 0.3s ease-in-out
+    width: 400px;
+    transition: width 0.3s ease-in-out;
 }
 
 .card:hover {
@@ -45,6 +41,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-right: 10px;
 }
 
 .way-dot {
@@ -53,5 +50,5 @@
 
 .description-card {
     font-size: 16px;
-    width: 300px;
+    width: 100%;
 }

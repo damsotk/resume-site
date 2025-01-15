@@ -10,7 +10,7 @@ function MainPageShowLogic() {
     };
     return (
 
-        <div className='container'>
+        <div className="container forResp">
             <div className='just-flex-yo'>
                 <div className='text-greeting'>
                     MY WORK
