@@ -212,7 +212,8 @@ const BuySellSection = ({ stockList }) => {
                                         className='stockItem'
                                         onClick={() => handleSelectStock(stock)}
                                     >
-                                        {stock.stockName} - ${stock.price}
+                                        <div>{stock.stockName} </div>
+                                        <div>${stock.price}</div>
                                     </div>
                                 ))}
                             </div>
@@ -246,11 +247,11 @@ const BuySellSection = ({ stockList }) => {
                             </div>
 
                             {userStocksShow && (
-                                <div className="stockDropdown">
+                                <div className="stockListDropdown">
                                     {userStocks.map((stock, index) => (
                                         <div
                                             key={index}
-                                            className="stockOption"
+                                            className="stockItem"
                                             onClick={() => handleStockSelect(stock)}
                                         >
                                             {stock.stockName}

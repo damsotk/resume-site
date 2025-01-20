@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import axios from 'axios';
 import './exchange.css'
+import './responsive-styles-exchange.css'
 import ExchangeModal from './exchangeModal/exchangeModal';
 import BuySellSection from './exchangeBuySellSection/exchangeBuySellSection';
 import { useNavigate } from 'react-router-dom';

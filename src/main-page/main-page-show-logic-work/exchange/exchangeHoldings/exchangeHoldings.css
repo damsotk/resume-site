@@ -4,8 +4,7 @@
 
 .userAllMoneyInExchange {
     display: flex;
-    width: 100%;
-    justify-content: space-between;
+    flex-direction: column;
 }
 
 .totalInvestmentBalance {
@@ -27,4 +26,11 @@
     position: absolute;
     right: 0px;
     bottom: -20px;
+}
+.exchangeForMoneyInfoHolding {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    color: #6a6a6a;
+    flex-wrap: wrap;
 }

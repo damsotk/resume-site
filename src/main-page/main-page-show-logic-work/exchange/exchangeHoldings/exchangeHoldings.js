@@ -49,13 +49,13 @@ const ExchangeHoldings = () => {
         <div className='exchangeDisplay'>
           <div className='exchangeForMainInfo'>
             <div className='infoAboutUserStocks'>
-              <div className="exchangeForMoneyInfo">
-                <div className='exchangeContainerFlexUsernameAndBalance'>
+              <div className="exchangeForMoneyInfoHolding">
+                <div className='exchangeHoldingTotalBalance'>
                   <div className="exchangeMoneyText">TOTAL BALANCE</div>
-                  <div className='exchangeMoneyText'>YOUR BALANCE IN STOCKS</div>
+                  <div className="exchangeMainBalance">${balance}</div>
                 </div>
                 <div className="userAllMoneyInExchange">
-                  <div className="exchangeMainBalance">${balance}</div>
+                  <div className='exchangeMoneyText'>YOUR BALANCE IN STOCKS</div>
                   <div className='totalInvestmentBalanceFlex'>
                     <div className={`percHoldings exchangeBalanceStatus ${percentChange < 0 ? 'exchangeBackDown' : 'exchangeBackUp'}`}>
                       <div className={percentChange < 0 ? 'exchangeLineStatusDown' : 'exchangeLineStatusUp'}></div>
@@ -86,7 +86,12 @@ const ExchangeHoldings = () => {
                               <div className="ident">GGL</div>
                             </div>
                           </div>
-                          <div className="stockCurrentPrice">{stock.quantity}</div>
+                          <div
+                            className="stockCurrentPrice"
+                            title={stock.quantity}
+                          >
+                            {Number(stock.quantity).toFixed(5)}
+                          </div>
                           <div>Your money in this stock {stock.totalInvestment}</div>
                           <div>Your money if you sell  {stock.totalCurrentValue}</div>
                           <div>{stock.percentChange}</div>

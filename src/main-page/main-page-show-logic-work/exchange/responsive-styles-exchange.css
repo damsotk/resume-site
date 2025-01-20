@@ -1,0 +1,110 @@
+ /* Extra small devices (до 576px) */
+ @media (max-width: 575.98px) {
+     .exchangeForMainInfo {
+         /* background-color: red; */
+         flex-direction: column-reverse;
+         align-items: center !important;
+     }
+
+     .exchangeBestStocks {
+         flex-wrap: wrap;
+     }
+
+     .stockCard {
+         width: 100%;
+     }
+
+     .percHoldings {
+         position: absolute;
+         bottom: 20px !important;
+         right: -100px !important;
+     }
+
+ }
+
+ /* Small devices (576px до 768px) */
+ @media (min-width: 576px) and (max-width: 767.98px) {
+     .exchangeForMainInfo {
+         /* background-color: red; */
+         flex-direction: column-reverse;
+         align-items: center !important;
+     }
+
+     .exchangeBestStocks {
+         flex-wrap: wrap;
+     }
+
+     .stockCard {
+         width: 100%;
+     }
+
+     .percHoldings {
+         position: absolute;
+         bottom: 20px !important;
+         right: -100px !important;
+     }
+
+     .exchangeBuyPlace {
+         width: 100% !important;
+     }
+ }
+
+ /* Medium devices (768px до 992px) */
+ @media (min-width: 768px) and (max-width: 991.98px) {
+     .exchangeForMainInfo {
+         /* background-color: red; */
+         flex-direction: column-reverse;
+         align-items: center !important;
+     }
+
+     .exchangeBestStocks {
+         flex-wrap: wrap;
+     }
+
+     .stockCard {
+         width: 100%;
+     }
+
+     .percHoldings {
+         position: absolute;
+         bottom: 20px !important;
+         right: -100px !important;
+     }
+
+     .exchangeBuyPlace {
+         width: 100% !important;
+     }
+ }
+
+ /* Large devices (992px до 1200px) */
+ @media (min-width: 992px) and (max-width: 1199.98px) {
+     .exchangeForMainInfo {
+         flex-direction: column-reverse;
+         align-items: center;
+     }
+
+     .exchangeBuyPlace {
+         width: 100% !important;
+     }
+ }
+
+ /* Extra large devices (1200px до 1400px) */
+ @media (min-width: 1200px) and (max-width: 1399.98px) {
+     .exchangeForMainInfo {
+         flex-direction: column-reverse;
+         align-items: center;
+     }
+
+     .exchangeBuyPlace {
+         width: 100% !important;
+     }
+
+     .infoAboutStocks {
+         width: 100% !important;
+     }
+ }
+
+ /* Extra extra large devices (1400px і більше) */
+ @media (min-width: 1400px) {
+
+ }

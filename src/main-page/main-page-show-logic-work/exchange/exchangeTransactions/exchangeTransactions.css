@@ -1,0 +1,16 @@
+.userInfoTrans {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.exchangeTextForTrans {
+    font-family: "Electrolize", sans-serif;
+    font-size: 20px;
+    color: #6a6a6a;
+}
+
+.exchangeForMainInfo .transaction {
+    display: flex;
+    flex-direction: column;
+}
