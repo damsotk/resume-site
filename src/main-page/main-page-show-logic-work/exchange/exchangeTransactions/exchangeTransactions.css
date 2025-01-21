@@ -14,3 +14,56 @@
     display: flex;
     flex-direction: column;
 }
+
+.allTransactionCards {
+    display: flex; 
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.transactionCard {
+    background-color: #343434;
+    padding: 20px;
+    border-radius: 20px;
+    flex-grow: 1;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.transactionCardNameDate {
+    display: flex;
+    justify-content: space-between;
+    color: #6a6a6a;
+    align-items: center;
+}
+
+.transactionDate {
+    font-size: 10px;
+}
+
+.transactionStockQuantity {
+    font-size: 30px;
+    font-family: "Electrolize", sans-serif;
+}
+
+.transactionCardTypePurchase {
+    display: flex;
+    justify-content: space-between;
+    color: #6a6a6a;
+    align-items: center;
+}
+
+.transactionType {
+    background-color: #1f1f1f;
+    padding: 5px;
+    border-radius: 5px;
+    width: 40px;
+    text-align: center;
+}
+
+.transactionPurchase {
+    font-family: "Electrolize", sans-serif;
+}
