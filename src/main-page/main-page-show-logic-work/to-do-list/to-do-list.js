@@ -1,230 +1,266 @@
 import React, { useState, useEffect } from 'react';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { format } from 'date-fns';
-import axios from 'axios';
 import './to-do-list.css';
-import useBallsAnimation from '../../hooks/useBallsAnimation';
+import DatePicker from 'react-datepicker'; 
 import ToDoListHeader from './to-do-list-header/to-do-list-header';
-
-const Modal = ({ isOpen, affair, onClose, onSave }) => {
-  const [editedAffair, setEditedAffair] = useState({ ...affair });
-
-  useEffect(() => {
-    setEditedAffair({ ...affair });
-  }, [affair]);
-
-  if (!isOpen) return null;
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedAffair({ ...editedAffair, [name]: value });
-  };
-
-  const handleSave = () => {
-    onSave({
-      ...editedAffair,
-      tags: typeof editedAffair.tags === 'string'
-        ? editedAffair.tags.split(',').map(tag => tag.trim())
-        : editedAffair.tags
-    });
-  };
-
-  return (
-    <div className="modal">
-      <div className="modal-content">
-        <h2>Edit Affair</h2>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={editedAffair.name}
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="description"
-          placeholder="Description"
-          value={editedAffair.description}
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="end_time"
-          placeholder="End Time"
-          value={editedAffair.end_time}
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="tags"
-          placeholder="Tags (comma separated)"
-          value={editedAffair.tags}
-          onChange={handleChange}
-        />
-        <button onClick={handleSave}>Save</button>
-        <button onClick={onClose}>Cancel</button>
-      </div>
-    </div>
-  );
-};
+import { format } from 'date-fns';
 
 function ToDoList() {
   const [affairs, setAffairs] = useState([]);
-  const [newAffair, setNewAffair] = useState({
-    name: '',
-    description: '',
-    end_time: '',
-    tags: '',
-    endDate: new Date()
-  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [name, setName] = useState(''); 
+  const [description, setDescription] = useState(''); 
+  const [tags, setTags] = useState(''); 
+  const [endDate, setEndDate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentAffair, setCurrentAffair] = useState(null);
-  const balls = useBallsAnimation();
-
 
   useEffect(() => {
-    axios.get('http://localhost:5000/daily_affairs')
-      .then(response => {
-        const fetchedAffairs = response.data.map(affair => ({
-          ...affair,
-          tags: Array.isArray(affair.tags) ? affair.tags : affair.tags.split(',').map(tag => tag.trim())
-        }));
-        setAffairs(fetchedAffairs);
-      })
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
+    const fetchAffairs = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:3000/api/user-affairs', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-  const handleAddAffair = () => {
-    if (!newAffair.name.trim()) return;
+        if (!response.ok) {
+          throw new Error('Помилка отримання завдань');
+        }
 
-    const affairToAdd = {
-      id: String(affairs.length + 1),
-      ...newAffair,
-      tags: newAffair.tags.split(',').map(tag => tag.trim())
+        const data = await response.json();
+        setAffairs(data.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    axios.post('http://localhost:5000/daily_affairs', affairToAdd)
-      .then(response => {
-        setAffairs([...affairs, response.data]);
-        setNewAffair({
-          name: '',
-          description: '',
-          end_time: '',
-          tags: ''
-        });
-      })
-      .catch(error => console.error('Error adding affair:', error));
+    fetchAffairs();
+  }, []);
+
+  const handleAddAffair = async () => {
+    const token = localStorage.getItem('token');
+    const tagsArray = tags.split(',').map(tag => tag.trim());
+  
+    
+    if (endDate) {
+      endDate.setDate(endDate.getDate() + 1); 
+    }
+  
+    try {
+      const response = await fetch('http://localhost:3000/api/user-affairs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          affair_name: name,
+          affair_description: description,
+          affair_tags: tagsArray,
+          affair_end_date: endDate ? endDate.toISOString() : null, 
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Не вдалося додати завдання');
+      }
+  
+      const newAffair = await response.json();
+      setAffairs(prevAffairs => [...prevAffairs, newAffair.data]);
+      setName('');
+      setDescription('');
+      setTags('');
+      setEndDate(null);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleDeleteAffair = (id) => {
-    axios.delete(`http://localhost:5000/daily_affairs/${id}`)
-      .then(() => {
-        setAffairs(affairs.filter(affair => affair.id !== id));
-      })
-      .catch(error => console.error('Error deleting affair:', error));
-  };
-
-  const handleDateChange = (date) => {
-    const formattedDate = format(date, 'dd.MM.yyyy, HH:mm:ss');
-    setNewAffair({ ...newAffair, end_time: formattedDate, endDate: date });
-  };
-
-  const openModal = (affair) => {
+  const handleEditAffair = (affair) => {
     setCurrentAffair(affair);
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setCurrentAffair(null);
+  const handleSaveAffair = async () => {
+    const token = localStorage.getItem('token');
+  
+    
+    if (currentAffair.affair_end_date) {
+      let updatedDate = new Date(currentAffair.affair_end_date);
+      updatedDate.setDate(updatedDate.getDate() + 1); 
+      currentAffair.affair_end_date = updatedDate.toISOString();
+    }
+  
+    try {
+      const response = await fetch(`http://localhost:3000/api/user-affairs/${currentAffair.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          affair_name: currentAffair.affair_name,
+          affair_description: currentAffair.affair_description,
+          affair_tags: currentAffair.affair_tags,
+          affair_end_date: currentAffair.affair_end_date,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Не вдалося оновити завдання');
+      }
+  
+      const updatedAffair = await response.json();
+      setIsModalOpen(false);
+      setCurrentAffair(null);
+  
+      setAffairs((prevAffairs) => {
+        const updated = prevAffairs.map((affair) =>
+          String(affair.id) === updatedAffair.data.id ? updatedAffair.data : affair
+        );
+        return updated;
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleFinishAffair = (id) => {
-    const finishedAffair = affairs.find(affair => affair.id === id);
+  const handleDeleteAffair = async (id) => {
+    const token = localStorage.getItem('token');
 
-    const completedAffair = {
-      ...finishedAffair,
-      completion_time: new Date().toLocaleString()
-    };
+    try {
+      const response = await fetch(`http://localhost:3000/api/user-affairs/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
 
-    axios.post('http://localhost:5000/completed_affairs', completedAffair)
-      .then(() => {
-        axios.delete(`http://localhost:5000/daily_affairs/${id}`)
-          .then(() => {
-            setAffairs(affairs.filter(affair => affair.id !== id));
-          })
-          .catch(error => console.error('Error deleting affair:', error));
-      })
-      .catch(error => console.error('Error moving affair to completed:', error));
+      if (!response.ok) {
+        throw new Error('Не вдалося видалити завдання');
+      }
+
+      setAffairs((prevAffairs) => prevAffairs.filter((affair) => affair.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const saveChanges = (editedAffair) => {
-    axios.put(`http://localhost:5000/daily_affairs/${editedAffair.id}`, editedAffair)
-      .then(response => {
-        setAffairs(affairs.map(affair => affair.id === editedAffair.id ? response.data : affair));
-        closeModal();
-      })
-      .catch(error => console.error('Error updating affair:', error));
-  };
+  
 
   return (
-    <div className='background'>
-      <div className='containerForBalls'></div>
+    <div className="background">
+      <div className="containerForBalls"></div>
       <ToDoListHeader />
-      <div className='flexForInputsDailyAffairs'>
+      <div className="flexForInputsDailyAffairs">
         <input
           type="text"
           placeholder="Name"
-          value={newAffair.name}
-          onChange={(e) => setNewAffair({ ...newAffair, name: e.target.value })}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
         <input
           type="text"
           placeholder="Description"
-          value={newAffair.description}
-          onChange={(e) => setNewAffair({ ...newAffair, description: e.target.value })}
-        />
-        <DatePicker
-          selected={newAffair.endDate}
-          onChange={handleDateChange}
-          showTimeSelect
-          timeFormat="HH:mm:ss"
-          timeIntervals={1}
-          dateFormat="dd.MM.yyyy, HH:mm:ss"
-          placeholderText="Select end date"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
         <input
           type="text"
           placeholder="Tags (comma separated)"
-          value={newAffair.tags}
-          onChange={(e) => setNewAffair({ ...newAffair, tags: e.target.value })}
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
         />
-        <div className='buttonForToDo' onClick={handleAddAffair}>Add Affair</div>
+        <DatePicker
+          selected={endDate}
+          onChange={(date) => setEndDate(date)}
+          placeholderText="Select End Date"
+          dateFormat="dd.MM.yyyy"
+        />
+        <div className="buttonForToDo" onClick={handleAddAffair}>Add Affair</div>
       </div>
-      <div className='cardsContainerDaily'>
-        {affairs.map(affair => (
-          <div key={affair.id} className='cardDailyAffair'>
-            <div className='headCardForDailyAffair'>
-              <div className='affairName'>{affair.name}</div>
-              <div>{affair.end_time}</div>
+      <div className="cardsContainerDaily">
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          affairs.map((affair) => (
+            <div className="cardDailyAffair" key={affair.id}>
+              <div className="headCardForDailyAffair">
+                <div className="affairName">{affair.affair_name}</div>
+                <div>{affair.affair_end_date ? format(new Date(affair.affair_end_date), 'dd.MM.yyyy') : ''}</div>
+              </div>
+              <div className="descDailyAffairCard">{affair.affair_description}</div>
+              <div className="tagsDailyAffairCard">
+                {Array.isArray(affair.affair_tags) ? affair.affair_tags.join(', ') : ''}
+              </div>
+              <div className="settingsDailyAffairCard">
+                <div className="buttonForAffairs" onClick={() => handleDeleteAffair(affair.id)}>
+                  Delete
+                </div>
+                <div className="buttonForAffairs" onClick={() => handleEditAffair(affair)}>
+                  Edit
+                </div>
+                <div className="buttonForAffairs">Finish</div>
+              </div>
             </div>
-            <div className='descDailyAffairCard'>{affair.description}</div>
-            <div className='tagsDailyAffairCard'>{Array.isArray(affair.tags) ? affair.tags.join(', ') : affair.tags}</div>
-            <div className='settingsDailyAffairCard'>
-              <div className='buttonForAffairs' onClick={() => handleDeleteAffair(affair.id)}>Delete</div>
-              <div className='buttonForAffairs' onClick={() => openModal(affair)}>Edit</div>
-              <div className='buttonForAffairs' onClick={() => handleFinishAffair(affair.id)}>Finish</div>
+          ))
+        )}
+      </div>
+
+      {isModalOpen && currentAffair && (
+        <div className="modal">
+          <div className="modalContent">
+            <h3>Edit Affair</h3>
+            <input
+              type="text"
+              value={currentAffair.affair_name}
+              onChange={(e) =>
+                setCurrentAffair({ ...currentAffair, affair_name: e.target.value })
+              }
+              placeholder="Name"
+            />
+            <textarea
+              value={currentAffair.affair_description}
+              onChange={(e) =>
+                setCurrentAffair({ ...currentAffair, affair_description: e.target.value })
+              }
+              placeholder="Description"
+            />
+            <input
+              type="text"
+              value={currentAffair.affair_tags.join(', ')}
+              onChange={(e) =>
+                setCurrentAffair({
+                  ...currentAffair,
+                  affair_tags: e.target.value.split(',').map((tag) => tag.trim()),
+                })
+              }
+              placeholder="Tags (comma separated)"
+            />
+            <DatePicker
+              selected={new Date(currentAffair.affair_end_date)}
+              onChange={(date) =>
+                setCurrentAffair({
+                  ...currentAffair,
+                  affair_end_date: date.toISOString(),
+                })
+              }
+              placeholderText="Select End Date"
+              dateFormat="yyyy-MM-dd"
+            />
+            <div className="modalActions">
+              <button onClick={handleSaveAffair}>Save</button>
+              <button onClick={() => setIsModalOpen(false)}>Cancel</button>
             </div>
           </div>
-        ))}
-      </div>
-      <Modal
-        isOpen={isModalOpen}
-        affair={currentAffair}
-        onClose={closeModal}
-        onSave={saveChanges}
-      />
+        </div>
+      )}
     </div>
   );
 }

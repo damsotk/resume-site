@@ -709,7 +709,144 @@ app.get('/api/get_user_transactions', authenticateToken, async (req, res) => {
   }
 });
 
+const dbTodoList = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'secret',
+  database: 'todo_list_db',
+});
 
+dbTodoList.connect(err => {
+  if (err) {
+    console.error('Помилка підключення до біржової бази даних:', err);
+    return;
+  }
+  console.log('Успішно підключено до туду бази даних');
+});
+
+app.get('/api/user-affairs', authenticateToken, (req, res) => {
+  const userId = req.user.id;
+  
+  dbTodoList.query(
+    'SELECT * FROM affairs WHERE user_id = ?',
+    [userId],
+    (err, results) => {
+      if (err) {
+        console.error('Помилка при отриманні завдань користувача:', err);
+        return res.status(500).json({ message: 'Помилка сервера' });
+      }
+
+      res.json({
+        message: 'Завдання успішно отримано',
+        data: results,
+      });
+    }
+  );
+});
+
+
+app.post('/api/user-affairs', authenticateToken, (req, res) => {
+  const userId = req.user.id; 
+  const { affair_name, affair_description, affair_tags, affair_end_date } = req.body;
+
+  if (!affair_name || !affair_description || !affair_tags || !affair_end_date) {
+    return res.status(400).json({ message: 'Всі поля обов’язкові для заповнення' });
+  }
+
+  const tagsString = JSON.stringify(affair_tags); 
+  const formattedDate = new Date(affair_end_date).toISOString().split('T')[0]; 
+
+  const query = `
+    INSERT INTO affairs (user_id, affair_name, affair_description, affair_tags, affair_end_date) 
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  dbTodoList.query(
+    query,
+    [userId, affair_name, affair_description, tagsString, formattedDate],
+    (err, result) => {
+      if (err) {
+        console.error('Помилка додавання завдання:', err);
+        return res.status(500).json({ message: 'Не вдалося додати завдання' });
+      }
+      res.status(201).json({
+        message: 'Завдання успішно додано',
+        data: {
+          id: result.insertId,
+          affair_name,
+          affair_description,
+          affair_tags,
+          affair_end_date: formattedDate,
+        },
+      });
+    }
+  );
+});
+
+app.delete('/api/user-affairs/:id', authenticateToken, (req, res) => {
+  const userId = req.user.id;
+  const affairId = req.params.id; 
+
+  const query = 'DELETE FROM affairs WHERE id = ? AND user_id = ?';
+  dbTodoList.query(query, [affairId, userId], (err, result) => {
+    if (err) {
+      console.error('Помилка видалення завдання:', err);
+      return res.status(500).json({ message: 'Не вдалося видалити завдання' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Завдання не знайдено або ви не маєте доступу до нього' });
+    }
+
+    res.status(200).json({ message: 'Завдання успішно видалено' });
+  });
+});
+
+app.put('/api/user-affairs/:id', authenticateToken, (req, res) => {
+  const userId = req.user.id; 
+  const affairId = req.params.id; 
+  const { affair_name, affair_description, affair_tags, affair_end_date } = req.body;
+
+  
+  if (!affair_name || !affair_description || !affair_tags || !affair_end_date) {
+    return res.status(400).json({ message: 'Всі поля обов’язкові для заповнення' });
+  }
+
+  const tagsString = JSON.stringify(affair_tags); 
+  const formattedDate = new Date(affair_end_date).toISOString().split('T')[0];
+
+  const query = `
+    UPDATE affairs
+    SET affair_name = ?, affair_description = ?, affair_tags = ?, affair_end_date = ?
+    WHERE id = ? AND user_id = ?
+  `;
+
+  dbTodoList.query(
+    query,
+    [affair_name, affair_description, tagsString, formattedDate, affairId, userId],
+    (err, result) => {
+      if (err) {
+        console.error('Помилка оновлення завдання:', err);
+        return res.status(500).json({ message: 'Не вдалося оновити завдання' });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: 'Завдання не знайдено або ви не маєте доступу до нього' });
+      }
+
+      res.status(200).json({
+        message: 'Завдання успішно оновлено',
+        data: {
+          id: affairId,
+          affair_name,
+          affair_description,
+          affair_tags,
+          affair_end_date: formattedDate,
+        },
+      });
+    }
+  );
+});
 process.on('SIGINT', () => {
   clearInterval(updateAllStocks);
   process.exit();
