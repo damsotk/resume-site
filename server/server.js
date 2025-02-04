@@ -16,33 +16,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const port = 3000;
-const dataPath = path.join(__dirname, 'data.json');
-
-let data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-
-app.get('/leap-to-riches/:id', (req, res) => {
-  console.log('GET request for player with id ${req.params.id}');
-  const player = data['leap-to-riches'].find(p => p.id === req.params.id);
-  if (player) {
-    res.json(player);
-  } else {
-    res.status(404).send('Player not found');
-  }
-});
-
-app.put('/leap-to-riches/:id', (req, res) => {
-  const playerId = req.params.id;
-  const playerIndex = data['leap-to-riches'].findIndex(p => p.id === playerId);
-  if (playerIndex !== -1) {
-    data['leap-to-riches'][playerIndex] = req.body;
-    fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
-    res.json(data['leap-to-riches'][playerIndex]);
-  } else {
-    res.status(404).send('Player not found');
-  }
-});
-
-
 
 const db = mysql.createConnection({
   host: 'localhost',
@@ -726,9 +699,31 @@ dbTodoList.connect(err => {
 
 app.get('/api/user-affairs', authenticateToken, (req, res) => {
   const userId = req.user.id;
+
   
   dbTodoList.query(
     'SELECT * FROM affairs WHERE user_id = ?',
+    [userId],
+    (err, results) => {
+      if (err) {
+        console.error('Помилка при отриманні завдань користувача:', err);
+        return res.status(500).json({ message: 'Помилка сервера' });
+      }
+
+      res.json({
+        message: 'Завдання успішно отримано',
+        data: results,
+      });
+    }
+  );
+});
+
+app.get('/api/user-completed-affairs', authenticateToken, (req, res) => {
+  const userId = req.user.id;
+
+ 
+  dbTodoList.query(
+    'SELECT * FROM finish_affairs WHERE user_id = ?',
     [userId],
     (err, results) => {
       if (err) {
@@ -784,7 +779,7 @@ app.post('/api/user-affairs', authenticateToken, (req, res) => {
 });
 
 app.delete('/api/user-affairs/:id', authenticateToken, (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user.id; 
   const affairId = req.params.id; 
 
   const query = 'DELETE FROM affairs WHERE id = ? AND user_id = ?';
@@ -804,7 +799,7 @@ app.delete('/api/user-affairs/:id', authenticateToken, (req, res) => {
 
 app.put('/api/user-affairs/:id', authenticateToken, (req, res) => {
   const userId = req.user.id; 
-  const affairId = req.params.id; 
+  const affairId = req.params.id;
   const { affair_name, affair_description, affair_tags, affair_end_date } = req.body;
 
   
@@ -813,7 +808,7 @@ app.put('/api/user-affairs/:id', authenticateToken, (req, res) => {
   }
 
   const tagsString = JSON.stringify(affair_tags); 
-  const formattedDate = new Date(affair_end_date).toISOString().split('T')[0];
+  const formattedDate = new Date(affair_end_date).toISOString().split('T')[0]; 
 
   const query = `
     UPDATE affairs
@@ -847,6 +842,213 @@ app.put('/api/user-affairs/:id', authenticateToken, (req, res) => {
     }
   );
 });
+
+app.get('/api/user-week-affairs', authenticateToken, (req, res) => {
+  const userId = req.user.id;
+
+  
+  const query = 'SELECT * FROM week_affairs WHERE user_id = ?';
+  
+  
+  dbTodoList.query(query, [userId], (error, weekAffairsResults) => {
+    if (error) {
+      
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    
+    const taskIds = weekAffairsResults.reduce((ids, week) => {
+      
+      return ids.concat(
+        week.week_monday,
+        week.week_tuesday,
+        week.week_wednesday,
+        week.week_thursday,
+        week.week_friday,
+        week.week_saturday,
+        week.week_sunday
+      );
+    }, []);
+
+    
+    const uniqueTaskIds = [...new Set(taskIds)];
+
+    
+    if (uniqueTaskIds.length > 0) {
+      const affairsQuery = 'SELECT * FROM affairs WHERE id IN (?)';
+      
+      dbTodoList.query(affairsQuery, [uniqueTaskIds], (affairsError, affairsResults) => {
+        if (affairsError) {
+          return res.status(500).json({ error: 'Error fetching affairs' });
+        }
+
+        
+        const affairsMap = affairsResults.reduce((map, affair) => {
+          map[affair.id] = affair;  
+          return map;
+        }, {});
+
+        
+        const transformedWeeks = weekAffairsResults.map(week => {
+          return {
+            ...week,
+            week_monday: week.week_monday.map(id => affairsMap[id] || { message: 'No task' }),
+            week_tuesday: week.week_tuesday.map(id => affairsMap[id] || { message: 'No task' }),
+            week_wednesday: week.week_wednesday.map(id => affairsMap[id] || { message: 'No task' }),
+            week_thursday: week.week_thursday.map(id => affairsMap[id] || { message: 'No task' }),
+            week_friday: week.week_friday.map(id => affairsMap[id] || { message: 'No task' }),
+            week_saturday: week.week_saturday.map(id => affairsMap[id] || { message: 'No task' }),
+            week_sunday: week.week_sunday.map(id => affairsMap[id] || { message: 'No task' }),
+          };
+        });
+
+        
+        res.json(transformedWeeks);
+      });
+    } else {
+      
+      res.json(weekAffairsResults);
+    }
+  });
+});
+
+app.post('/api/user-finish-affairs', authenticateToken, (req, res) => {
+  const userId = req.user.id;
+  const { affair_id, affair_name, affair_end_date, affair_description, affair_tags } = req.body;
+
+  if (!affair_id) {
+    return res.status(400).json({ error: 'Невірні дані' });
+  }
+
+  
+  const formattedAffairEndDate = new Date(affair_end_date).toISOString().split('T')[0];
+
+  const tagsString = JSON.stringify(affair_tags);
+
+  dbTodoList.beginTransaction(err => {
+    if (err) {
+      console.error('Помилка транзакції:', err);
+      return res.status(500).json({ error: 'Помилка сервера' });
+    }
+
+    
+    dbTodoList.query(
+      `INSERT INTO finish_affairs (user_id, affair_id, affair_name, affair_end_date, affair_description, affair_tags, affair_finish_date)
+       VALUES (?, ?, ?, ?, ?, ?, NOW())`,
+      [userId, affair_id, affair_name, formattedAffairEndDate, affair_description, tagsString],
+      (insertErr) => {
+        if (insertErr) {
+          return dbTodoList.rollback(() => {
+            console.error('Помилка додавання у finish_affairs:', insertErr);
+            res.status(500).json({ error: 'Помилка сервера' });
+          });
+        }
+
+        
+        dbTodoList.query(
+          `DELETE FROM affairs WHERE id = ? AND user_id = ?`,
+          [affair_id, userId],
+          (deleteErr, result) => {
+            if (deleteErr) {
+              return dbTodoList.rollback(() => {
+                console.error('Помилка видалення з affairs:', deleteErr);
+                res.status(500).json({ error: 'Помилка сервера' });
+              });
+            }
+
+            if (result.affectedRows === 0) {
+              return dbTodoList.rollback(() => {
+                res.status(404).json({ error: 'Завдання не знайдено або вже видалено' });
+              });
+            }
+
+            
+            dbTodoList.commit(commitErr => {
+              if (commitErr) {
+                return dbTodoList.rollback(() => {
+                  console.error('Помилка під час commit:', commitErr);
+                  res.status(500).json({ error: 'Помилка сервера' });
+                });
+              }
+
+              res.json({ success: true, message: 'Завдання завершено' });
+            });
+          }
+        );
+      }
+    );
+  });
+});
+
+app.post('/api/user-week-affairs', authenticateToken, (req, res) => {
+  const userId = req.user.id; 
+  const { week_affairs_name, week_monday, week_tuesday, week_wednesday, week_thursday, week_friday, week_saturday, week_sunday } = req.body;
+
+  
+  if (!week_affairs_name || !Array.isArray(week_monday) || !Array.isArray(week_tuesday) || !Array.isArray(week_wednesday) || !Array.isArray(week_thursday) || !Array.isArray(week_friday) || !Array.isArray(week_saturday) || !Array.isArray(week_sunday)) {
+    return res.status(400).json({ message: 'All fields are required and should be in proper format' });
+  }
+
+  
+  const query = `
+    INSERT INTO week_affairs (user_id, week_affairs_name, week_monday, week_tuesday, week_wednesday, week_thursday, week_friday, week_saturday, week_sunday)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  
+  dbTodoList.query(query, [
+    userId,
+    week_affairs_name,
+    JSON.stringify(week_monday),
+    JSON.stringify(week_tuesday),
+    JSON.stringify(week_wednesday),
+    JSON.stringify(week_thursday),
+    JSON.stringify(week_friday),
+    JSON.stringify(week_saturday),
+    JSON.stringify(week_sunday)
+  ], (err, result) => {
+    if (err) {
+      console.error('Error inserting week affairs:', err);
+      return res.status(500).json({ message: 'Failed to add week affairs' });
+    }
+
+    
+    res.status(201).json({
+      message: 'Week affairs added successfully',
+      data: {
+        id: result.insertId,
+        week_affairs_name,
+        week_monday,
+        week_tuesday,
+        week_wednesday,
+        week_thursday,
+        week_friday,
+        week_saturday,
+        week_sunday
+      }
+    });
+  });
+});
+
+app.delete('/api/user-week-affairs/:id', authenticateToken, (req, res) => {
+  const weekId = req.params.id;
+  const userId = req.user.id;
+
+  const query = 'DELETE FROM week_affairs WHERE id = ? AND user_id = ?';
+  dbTodoList.query(query, [weekId, userId], (err, result) => {
+    if (err) {
+      console.error('Error deleting week:', err);
+      return res.status(500).json({ message: 'Failed to delete week' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Week not found or you do not have permission to delete it' });
+    }
+
+    res.status(200).json({ message: 'Week deleted successfully' });
+  });
+});
+
 process.on('SIGINT', () => {
   clearInterval(updateAllStocks);
   process.exit();

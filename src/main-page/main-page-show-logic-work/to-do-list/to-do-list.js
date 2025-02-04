@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import './to-do-list.css';
-import DatePicker from 'react-datepicker'; 
+import DatePicker from 'react-datepicker';
 import ToDoListHeader from './to-do-list-header/to-do-list-header';
 import { format } from 'date-fns';
 
@@ -11,7 +11,7 @@ function ToDoList() {
   const [name, setName] = useState(''); 
   const [description, setDescription] = useState(''); 
   const [tags, setTags] = useState(''); 
-  const [endDate, setEndDate] = useState(null);
+  const [endDate, setEndDate] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentAffair, setCurrentAffair] = useState(null);
 
@@ -43,15 +43,44 @@ function ToDoList() {
     fetchAffairs();
   }, []);
 
+  const handleFinishAffair = async (affair) => {
+    const token = localStorage.getItem('token');
+
+    try {
+      const response = await fetch(`http://localhost:3000/api/user-finish-affairs`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          affair_id: affair.id,
+          affair_name: affair.affair_name,
+          affair_end_date: affair.affair_end_date,
+          affair_description: affair.affair_description,
+          affair_tags: affair.affair_tags,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Не вдалося завершити завдання');
+      }
+
+      setAffairs((prevAffairs) => prevAffairs.filter((a) => a.id !== affair.id));
+    } catch (error) {
+      console.error("Помилка - ", error);
+    }
+  };
+
   const handleAddAffair = async () => {
     const token = localStorage.getItem('token');
     const tagsArray = tags.split(',').map(tag => tag.trim());
-  
-    
+
+
     if (endDate) {
       endDate.setDate(endDate.getDate() + 1); 
     }
-  
+
     try {
       const response = await fetch('http://localhost:3000/api/user-affairs', {
         method: 'POST',
@@ -66,11 +95,11 @@ function ToDoList() {
           affair_end_date: endDate ? endDate.toISOString() : null, 
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Не вдалося додати завдання');
       }
-  
+
       const newAffair = await response.json();
       setAffairs(prevAffairs => [...prevAffairs, newAffair.data]);
       setName('');
@@ -89,14 +118,14 @@ function ToDoList() {
 
   const handleSaveAffair = async () => {
     const token = localStorage.getItem('token');
-  
-    
+
+
     if (currentAffair.affair_end_date) {
       let updatedDate = new Date(currentAffair.affair_end_date);
       updatedDate.setDate(updatedDate.getDate() + 1); 
       currentAffair.affair_end_date = updatedDate.toISOString();
     }
-  
+
     try {
       const response = await fetch(`http://localhost:3000/api/user-affairs/${currentAffair.id}`, {
         method: 'PUT',
@@ -111,15 +140,15 @@ function ToDoList() {
           affair_end_date: currentAffair.affair_end_date,
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Не вдалося оновити завдання');
       }
-  
+
       const updatedAffair = await response.json();
       setIsModalOpen(false);
       setCurrentAffair(null);
-  
+
       setAffairs((prevAffairs) => {
         const updated = prevAffairs.map((affair) =>
           String(affair.id) === updatedAffair.data.id ? updatedAffair.data : affair
@@ -146,13 +175,14 @@ function ToDoList() {
         throw new Error('Не вдалося видалити завдання');
       }
 
-      setAffairs((prevAffairs) => prevAffairs.filter((affair) => affair.id !== id));
+      setAffairs((prevAffairs) => prevAffairs.filter((affair) => affair.id !== id)); 
     } catch (error) {
       console.error(error);
     }
   };
 
-  
+
+
 
   return (
     <div className="background">
@@ -206,7 +236,7 @@ function ToDoList() {
                 <div className="buttonForAffairs" onClick={() => handleEditAffair(affair)}>
                   Edit
                 </div>
-                <div className="buttonForAffairs">Finish</div>
+                <div className="buttonForAffairs" onClick={() => handleFinishAffair(affair)}>Finish</div>
               </div>
             </div>
           ))
@@ -214,8 +244,8 @@ function ToDoList() {
       </div>
 
       {isModalOpen && currentAffair && (
-        <div className="modal">
-          <div className="modalContent">
+        <div className="modalToDo">
+          <div className="modalContentToDo">
             <h3>Edit Affair</h3>
             <input
               type="text"
@@ -254,9 +284,9 @@ function ToDoList() {
               placeholderText="Select End Date"
               dateFormat="yyyy-MM-dd"
             />
-            <div className="modalActions">
-              <button onClick={handleSaveAffair}>Save</button>
-              <button onClick={() => setIsModalOpen(false)}>Cancel</button>
+            <div className="modalActionsTodo">
+              <div onClick={handleSaveAffair}>Save</div>
+              <div onClick={() => setIsModalOpen(false)}>Cancel</div>
             </div>
           </div>
         </div>
