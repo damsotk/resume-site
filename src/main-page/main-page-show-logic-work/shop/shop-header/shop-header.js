@@ -1,15 +1,10 @@
 import './shop-header.css';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 function ShopHeader({ onSearch, totalCost, importNameForHeader }) {
-    const [searchQuery, setSearchQuery] = useState('');
     const location = useLocation();
-
-    const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value);
-        onSearch(event.target.value);
-    };
 
 
     const isProductPage = location.pathname.startsWith('/shop/product');
@@ -18,9 +13,14 @@ function ShopHeader({ onSearch, totalCost, importNameForHeader }) {
         return (
             <div style={{ position: 'sticky', top: '10px', zIndex: '11', marginBottom: '20px' }}>
                 <div className="headerShopProductDetails">
-                    <div className="buttonBack">
-                        BACK
-                    </div>
+                    <Link
+                        to={`/shop`}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
+                        <div className="buttonBack">
+                            BACK
+                        </div>
+                    </Link>
                     <div className='nameForSelectProduct'>
                         {importNameForHeader}
                     </div>
@@ -39,17 +39,6 @@ function ShopHeader({ onSearch, totalCost, importNameForHeader }) {
         <div style={{ position: 'sticky', top: '20px', zIndex: '15' }}>
             <div className="headerShop">
                 <div className="logo">DAMSOT</div>
-                <div className="shopSearch">
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        placeholder="hm, I wanna..."
-                    />
-                    <div className="button" onClick={() => onSearch(searchQuery)}>
-                        Search
-                    </div>
-                </div>
                 <div className="shopAllCost">${totalCost.toFixed(2)}</div>
             </div>
         </div>

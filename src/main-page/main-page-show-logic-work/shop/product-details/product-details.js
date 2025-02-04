@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './product-details.css'
 import './product-details-animation.css'
 import ShopFooter from '../shop-footer/shop-footer';
@@ -13,8 +14,6 @@ function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [activeTab, setActiveTab] = useState('description');
 
-  const [addedProducts, setAddedProducts] = useState({});
-
   const [position, setPosition] = useState({ top: 0, left: 0 });
 
   const [otherProducts, setOtherProducts] = useState([]);
@@ -25,18 +24,10 @@ function ProductDetails() {
   const location = useLocation();
   const pageClass = location.pathname.replace(/\//g, '-');
 
-  const handleClick = (productId) => {
-    console.log(productId)
-    setAddedProducts(prevState => ({
-      ...prevState,
-      [productId]: !prevState[productId]
-    }));
-  };
-
   useEffect(() => {
     fetch(`http://localhost:3000/api/products/${id}`)
       .then(response => response.json())
-      .then(data => {setimportNameForHeader(data.name); setProduct(data);})
+      .then(data => { setimportNameForHeader(data.name); setProduct(data); })
       .catch(error => console.error('Error fetching product details:', error));
   }, [id]);
 
@@ -56,6 +47,10 @@ function ProductDetails() {
 
   const loadMoreProducts = () => {
     setVisibleProducts(prevVisible => prevVisible + 4);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
@@ -149,12 +144,6 @@ function ProductDetails() {
           description
         </div>
         <div
-          className={`productDetailsNavButton ${activeTab === 'additional' ? 'productTargetInfo' : ''}`}
-          onClick={() => setActiveTab('additional')}
-        >
-          additional information
-        </div>
-        <div
           className={`productDetailsNavButton ${activeTab === 'reviews' ? 'productTargetInfo' : ''}`}
           onClick={() => setActiveTab('reviews')}
         >
@@ -166,7 +155,6 @@ function ProductDetails() {
           <div className='productDescImages'>
             <div className='productDescImage' style={{ backgroundImage: `url("http://localhost:3000${product.imageUrl}")` }}>
             </div>
-            {/* <div className='productDescImageBack' style={{ backgroundImage: `url("http://localhost:3000/images/texture_black3.jpg")` }} > </div> */}
             <div className="animCircleText">
               {renderAnimatedText('damsot.shop hope you are like this')}
             </div>
@@ -219,16 +207,27 @@ function ProductDetails() {
         <div className='shopAllProducts'>
           {otherProducts.slice(0, visibleProducts).map((otherProduct) => (
             <div key={otherProduct.id} className='shopProduct'>
-              <div onClick={() => handleClick(otherProduct.id)} className={`icon ${addedProducts[otherProduct.id] ? 'checked' : 'plus'}`}></div>
-              <img style={{ position: 'relative' }} src={`http://localhost:3000${otherProduct.imageUrl}`} className="productImage" alt={otherProduct.name} />
-              <div className="productInfo">
-                <div className="productName">
-                  {otherProduct.name}
+              <Link
+                to={`/shop/products/${otherProduct.id}`}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+                onClick={scrollToTop}
+              >
+                <img
+                  style={{ position: 'relative' }}
+                  src={`http://localhost:3000${otherProduct.imageUrl}`}
+                  className="productImage"
+                  alt={otherProduct.name}
+                />
+                <div className="productInfo">
+                  <div className="productName">
+                    {otherProduct.name}
+                  </div>
+                  <div className="productPrice">
+                    ${otherProduct.price}
+                  </div>
                 </div>
-                <div className="productPrice">
-                  ${otherProduct.price}
-                </div>
-              </div>
+              </Link>
+
               <div className="buyButton">
                 <div className="buyButtonText old">Nice choice!</div>
                 <div className="buyButtonText new">Buy Now!</div>
@@ -237,14 +236,16 @@ function ProductDetails() {
           ))}
         </div>
         {visibleProducts < otherProducts.length && (
-          <button onClick={loadMoreProducts} className='loadMoreButton'>
-            Load More
-          </button>
+          <div className='loadMoreFlex'>
+            <div onClick={loadMoreProducts} className="btn btn-animation">
+              <span>load more</span>
+            </div>
+          </div>
         )}
       </div>
 
       <ShopFooter />
-    </div>
+    </div >
   );
 }
 

@@ -707,3 +707,20 @@
     color: #C0C0C0;
     font-family: 'Bebas Neue', sans-serif;
 }
+
+.loadMoreFlex {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.loadMoreButton {
+    padding: 10px;
+    border: 3px solid #252525;
+    font-family: 'Bebas Neue', sans-serif;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+    width: 50%;
+}
