@@ -26,11 +26,11 @@ function MovieSearch() {
     setLoadingDetails(true);
     try {
       const response = await fetch(`http://www.omdbapi.com/?i=${imdbID}&apikey=6ff8b3f1`);
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
+
       const data = await response.json();
       setSelectedMovie(data);
       setIsModalOpen(true);
@@ -116,24 +116,19 @@ function MovieSearch() {
         </div>
       </div>
       {error && <p className="error">{error}</p>}
-      {loading && <p className='loading'>Loading...</p>}
       <div className='containerWithFilms'>
         {movies.map((movie, index) => (
           <div className='film' key={index} onClick={() => handleMovieClick(movie.imdbID)}>
-            {loadingMovieId === movie.imdbID ? (
-              <p className='loading'>Loading...</p>
-            ) : (
-              <>
-                {movie.Poster !== "N/A" ? (
-                  <img className='filmPoster' src={movie.Poster} alt={`${movie.Title} poster`} />
-                ) : (
-                  <div className='placeholderPoster'>
-                    <div className='emptyPoster'></div>
-                  </div>
-                )}
-                <p className='filmTitle'>{movie.Title}</p>
-              </>
-            )}
+            <>
+              {movie.Poster !== "N/A" ? (
+                <img className='filmPoster' src={movie.Poster} alt={`${movie.Title} poster`} />
+              ) : (
+                <div className='placeholderPoster'>
+                  <div className='emptyPoster'></div>
+                </div>
+              )}
+              <p className='filmTitle'>{movie.Title}</p>
+            </>
           </div>
         ))}
       </div>
